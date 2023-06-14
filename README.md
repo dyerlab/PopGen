@@ -1,2 +1,3 @@
-# DLGenetic
-The base data types for genotype and allelic data types in Swift.
+# DLGeneticOld
+
+A description of this package.
