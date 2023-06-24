@@ -32,8 +32,6 @@ import Foundation
 import DLMatrix
 
 public struct AlleleFrequencies: Codable {
-    public var locus: String = ""
-    public var stratum: String = ""
     public var genotypes = [String:Double]()
     private var counts = [String: Double]()
     private var N = 0.0
@@ -55,13 +53,9 @@ public struct AlleleFrequencies: Codable {
         return self.N == 0 
     }
 
-    public init(name: String, locus: String = "Default") {
-        self.locus = name
-    }
+    public init() {}
     
     public init( freqs: [AlleleFrequencies] ) {
-        self.locus = freqs.first?.locus ?? "Undefined"
-        self.stratum = "All"
         for freq in freqs {
             self.N = self.N + freq.N
             self.numHets = self.numHets + freq.numHets
@@ -75,7 +69,7 @@ public struct AlleleFrequencies: Codable {
         }
     }
 
-    public init(genotypes: [Genotype], name: String = "Default", locus: String = "None" ) {
+    public init(genotypes: [Genotype] ) {
         for geno in genotypes {
             addGenotype(geno: geno)
         }
@@ -159,7 +153,7 @@ extension AlleleFrequencies: CustomStringConvertible {
 
 public extension AlleleFrequencies {
     static func Default() -> AlleleFrequencies {
-        let data = Stratum.DefaultStratum()
+        let data = DataStore.Default()
         let locus = data.individuals.locusKeys.first!
         let genos = data.individuals.getGenotypes(named: locus)
         let freqs = AlleleFrequencies(genotypes: genos)

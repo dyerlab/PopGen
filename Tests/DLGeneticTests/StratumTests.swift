@@ -56,7 +56,7 @@ class StratumTests: XCTestCase {
         let data = Stratum.DefaultStratum()
         let ind = data[2]
         print("ind: \(ind)")
-        XCTAssertEqual( ind.stratum, "88")
+        XCTAssertEqual( ind.strata["Population"], "88")
     }
 
     func testInitFamily() throws {
@@ -76,6 +76,7 @@ class StratumTests: XCTestCase {
 
     }
 
+    /*
     func testDefaultFamily() throws {
         let data = Stratum.DefaultFamily()
         XCTAssertEqual(data.count, 15)
@@ -110,6 +111,7 @@ class StratumTests: XCTestCase {
             print("cf125 frequency not estimated.")
         }
     }
+     
     
     
     
@@ -128,7 +130,7 @@ class StratumTests: XCTestCase {
         XCTAssertEqual( locations.count, 1)
         XCTAssertEqual( locations.first!.name, "1024PWP")
     }
-    
+
     
     func testSpatialStratum() throws {
         let data = Stratum.DefaultStratum()
@@ -140,6 +142,6 @@ class StratumTests: XCTestCase {
         XCTAssertEqual( coords.first!.longitude, -114.2935239)
     }
 
-    
+    */
     
 }

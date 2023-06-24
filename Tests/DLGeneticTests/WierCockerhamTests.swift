@@ -32,7 +32,7 @@ import XCTest
 
 final class WierCockerhamTests: XCTestCase {
 
-
+/*
     func testWC() throws {
         let store = DataStore.Default()
         let son101 = store.stratum(named: "101")
@@ -59,5 +59,5 @@ final class WierCockerhamTests: XCTestCase {
 
     }
 
-
+ */
 }

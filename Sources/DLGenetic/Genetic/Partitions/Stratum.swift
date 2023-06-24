@@ -97,8 +97,7 @@ public extension Stratum {
         for locus in ind.loci.keys.sorted() {
             if let geno = ind.loci[locus] {
                 frequencies[locus,
-                            default: AlleleFrequencies(name: self.name,
-                                                              locus: locus)].addGenotype(geno: geno)
+                            default: AlleleFrequencies()].addGenotype(geno: geno)
             }
         }
         individuals.append(ind)
@@ -192,6 +191,8 @@ public extension Stratum {
 public extension Stratum {
     
     
+    /*
+    
     static func DefaultFamily() -> Stratum {
         let headers = ["Family", "Offspring", "longitude", "latitude", "cf020", "cf125", "cf213", "cf273", "cf581", "cf585", "cf597", "cf634", "cf701"]
 
@@ -214,7 +215,7 @@ public extension Stratum {
 
         /* Set up the maternal individual */
         let mom = Individual()
-        mom.stratum = data[0][0]
+        mom.strata[ header[0] ] = data[0][0]
     
         if let lon = Double(data[0][2]),
            let lat = Double(data[0][3])
@@ -246,7 +247,7 @@ public extension Stratum {
         return family
     }
 
-    
+     */
     
     
     static func DefaultStratum() -> Stratum {
@@ -268,7 +269,7 @@ public extension Stratum {
 
         for i in 0 ..< raw.count {
             let ind = Individual()
-            ind.stratum = raw[i][0]
+            ind.strata[ header[0] ] = raw[i][0]
             if let lat = Double(raw[i][1]),
                let lon = Double(raw[i][2])
             {

@@ -36,13 +36,12 @@ class IndividualTests: XCTestCase {
         let ind = Individual()
         XCTAssertNil(ind.coord)
         XCTAssertEqual(ind.loci.keys.sorted(), [String]())
-        XCTAssertEqual(ind.stratum, "")
+        XCTAssertEqual(ind.strata, [String:String]())
     }
 
     func testDefault() throws {
         let ind = Individual.Default()
-        XCTAssertEqual(ind.stratum, "RVA")
-        XCTAssertEqual( ind.offspring, "")
+        XCTAssertEqual(ind.strata["Population"], "RVA")
         XCTAssertEqual(ind.coord!.latitude, 36.0)
         XCTAssertEqual(ind.coord!.longitude, -77.0)
         XCTAssertEqual(ind.loci.keys.sorted(), ["LTRS", "WNT", "EN", "EF", "ZMP", "AML"].sorted())
@@ -76,22 +75,7 @@ class IndividualTests: XCTestCase {
     }
     
     
-    
-    func testMoms() throws {
-        
-        let mom = Individual.DefaultMom()
-        let off = Individual.DefaultOffspring()
-        
-        print("\(mom)")
-        print("\(off)")
-        
-        XCTAssertTrue( mom.isSpatial )
-        XCTAssertTrue( off.isSpatial )
-        
-        
-        
-    }
-    
+
     
 
 }

@@ -31,8 +31,6 @@ import Foundation
 import SwiftUI
 
 public struct GeneticDiversity: Hashable {
-    public var locus: String = ""
-    public var stratum: String = "x"
     public var N: Int = 0
     public var A: Int = 0
     public var A95: Int = 0
@@ -47,8 +45,6 @@ public struct GeneticDiversity: Hashable {
         let alleles = frequencies.alleles
         let freqs = frequencies.frequencies(alleles: alleles)
 
-        stratum = frequencies.stratum
-        locus = frequencies.locus 
         N = Int( frequencies.numDiploid )
         A = alleles.count
         A95 = freqs.filter { $0 >= 0.05 }.count
@@ -67,7 +63,7 @@ public struct GeneticDiversity: Hashable {
 extension GeneticDiversity: CustomStringConvertible {
     /// Override of description for CustomStringConvertible
     public var description: String {
-        var ret = "Genetic Diversity for \(stratum): \n"
+        var ret = "Genetic Diversity: \n"
         ret += String("N: \(N)\n")
         ret += String("A: \(A)\n")
         ret += String("A95: \(A95)\n")

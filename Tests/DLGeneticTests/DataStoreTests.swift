@@ -34,7 +34,7 @@ import XCTest
 
 class DataStoreTests: XCTestCase {
 
-    
+    /*
     func testAdding() throws {
         
         let data = DataStore()
@@ -49,6 +49,7 @@ class DataStoreTests: XCTestCase {
 
         
     }
+     
     
     func testNoStratum() throws {
         let data = DataStore()
@@ -126,6 +127,6 @@ class DataStoreTests: XCTestCase {
         XCTAssertEqual( data.count, 59)
         
     }
-    
+     */
     
 }

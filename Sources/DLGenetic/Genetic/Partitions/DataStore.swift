@@ -31,111 +31,48 @@ import Foundation
 import DLMatrix
 
 public class DataStore: Codable, Identifiable  {
-    public var id = UUID()
-    public var species: String = ""
-    private var strata = [String: Stratum]()
+    public var individuals = [Individual]()
+    public var frequencies = [String: AlleleFrequencies]()
     
     public var count: Int {
-        return strata.keys.count
+        return individuals.count
     }
     
     public var isEmpty: Bool {
-        return self.strata.values.compactMap {$0.isEmpty}.allSatisfy( {$0 == true })
+        return individuals.count == 0
     }
     
     public var strataKeys: [String] {
-        return strata.keys.sorted { $0.localizedStandardCompare($1) == .orderedAscending }
+        return individuals.strataKeys
     }
     
     public var locusKeys: [String] {
-        var ret = [String]()
-        for key in strata.keys {
-            ret.append( contentsOf: strata[key]!.individuals.locusKeys )
-        }
-        return Set(ret).unique().sorted { $0.localizedStandardCompare($1) == .orderedAscending }
+        return individuals.locusKeys
     }
-    
-    public var numInds: Int {
-        return strata.values.compactMap { $0.count }.reduce( 0, +)
-    }
-    
-    public init() {}
-    
-    public func stratum( named: String ) -> Stratum {
-        return self.strata[named, default: Stratum(name: named) ]
-    }
-    
-    public func addIndiviudal( ind: Individual ) {
-        let strat = self.strata[ ind.stratum, default: Stratum(name: ind.stratum)]
-        strat.addIndividual(ind: ind )
-        self.strata[ ind.stratum ] = strat
-        
-    }
-    
-    public func frequenciesFor(locus: String) -> [AlleleFrequencies] {
-        return strata.values.compactMap { $0.frequencies[locus] }
-    }
-    
-    public func diversityFor( locus: String ) -> [GeneticDiversity] {
-        var ret = [GeneticDiversity]()
-        for key in strataKeys {
-            if let stratum = strata[key],
-               let freq = stratum.frequencies[locus] {
-                var div = GeneticDiversity(frequencies: freq )
-                div.stratum = key
-                ret.append( div )
-            }
-        }
-        return ret
-    }
-    
-    public func allFrequencysFor( locus: String ) -> AlleleFrequencies {
-        let allFreqs = self.strata.values.compactMap { $0.frequencies[locus] }
-        return AlleleFrequencies(freqs: allFreqs )
-    }
-    
-    public func allFrequencyMatrixFor( locus: String ) -> Matrix {
-        let allFreqs = self.allFrequencysFor(locus: locus)
-        let alleles = allFreqs.alleles
-        let ret = Matrix( strataKeys.count, alleles.count )
-        ret.colNames = alleles
-        ret.rowNames = strataKeys
-        
-        for key in 0 ..< strataKeys.count {
-            let stratum = strata[ strataKeys[key] ]
-            for allele in 0 ..< alleles.count {
-                
-                if let afreqs = stratum?.frequencies[ locus ] {
-                    ret[key,allele] = afreqs.frequency(allele: alleles[ allele ]  )
-                }
-            }
-        }
-        
-        return ret
-    }
-    
-    public func genotypeMatrixFor( locus: String ) -> Matrix {
-        let allFreqs = self.allFrequencysFor(locus: locus)
-        let allGenotypes = allFreqs.genotypes.keys.sorted()
-        let ret = Matrix( self.count, allGenotypes.count )
-        ret.colNames = allGenotypes
-        ret.rowNames = strataKeys
-        
-        for row in 0 ..< self.count {
-            let stratum = strata[ strataKeys[ row ] ]
-            if let freq = stratum?.frequencies[locus] {
-                for col in 0 ..< allGenotypes.count {
-                    let geno = allGenotypes[ col ]
-                    let popgeno = freq.genotypes[ geno, default: 0.0 ]
-                    ret[ row, col ] = popgeno
-                }
-            }
-        }
-        return ret
-    }
-    
-}
 
+    
+    public init() { }
+    
+
+    
+    enum CodingKeys: String, CodingKey {
+        case individuals
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        individuals = try values.decode( Array<Individual>.self, forKey: .individuals)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode( individuals, forKey: .individuals)
+    }
+
+    public func addIndiviudal( ind: Individual ) {
+        individuals.append( ind )
+    }
+}
 
 
 
@@ -144,48 +81,6 @@ public class DataStore: Codable, Identifiable  {
 
 extension DataStore {
     
-    
-    
-    public static func DefaultFamily() -> DataStore {
-        
-        let store = DataStore()
-        let data = store.dogwoodFamilies()
-        
-        //["Family", "Offspring", "Longitude", "Latitude", "Cf020", "cf125", "Cf213", "cf273", "Cf581", "cf585", "Cf597", "Cf634", "Cf701"],
-        
-        for row in data {
-            let ind = Individual()
-            ind.stratum = row[0]
-
-            if let lon = Double( row[2] ),
-               let lat = Double( row[3] ) {
-                ind.coord = Coordinate(longitude: lon, latitude: lat)
-            }
-            ind.loci["cf020"] = Genotype(raw: row[4])
-            ind.loci["cf125"] = Genotype(raw: row[5])
-            ind.loci["cf213"] = Genotype(raw: row[6])
-            ind.loci["cf273"] = Genotype(raw: row[7])
-            ind.loci["cf581"] = Genotype(raw: row[8])
-            ind.loci["cf585"] = Genotype(raw: row[9])
-            ind.loci["cf597"] = Genotype(raw: row[10])
-            ind.loci["cf634"] = Genotype(raw: row[11])
-            ind.loci["cf701"] = Genotype(raw: row[12])
-            
-
-            if row[1] != "0" {
-                ind.offspring = row[1]
-                store.addIndiviudal(ind: ind )
-            }
-            else {
-                store.strata[ ind.stratum ] = Stratum(mom: ind, name: ind.stratum)
-            }
-            
-            
-            
-        }
-        
-        return store
-    }
     
     
     private func dogwoodFamilies() -> [[String]] {
@@ -1122,7 +1017,8 @@ extension DataStore {
         
             for row in data {
                 let ind = Individual()
-                ind.stratum = row[1]
+                ind.strata[ "Region" ] = row[0]
+                ind.strata[ "Population" ] = row[1]
                 if let lat = Double(row[2]),
                    let lon = Double(row[3])
                 {
@@ -1147,12 +1043,9 @@ extension DataStore {
     
     public static func Default() -> DataStore {
         let store = DataStore()
-        let data = DefaultBaja()
         
-        for ind in data {
-            let stratum = store.strata[ ind.stratum, default: Stratum(name: ind.stratum) ]
-            stratum.addIndividual(ind: ind )
-            store.strata[ ind.stratum ] = stratum
+        for ind in DefaultBaja() {
+            store.addIndiviudal(ind: ind )
         }
         
         return store

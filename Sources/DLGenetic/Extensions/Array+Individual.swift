@@ -50,23 +50,10 @@ public extension Array where Element == Individual {
      - Returns: An array of strata in alphabetical order
      */
     var strataKeys: [String] {
-        if isFamily {
-            return ["Mother","Offspring"]
-        }
-        else {
-            return ["Population"]
-        }
-        // return first?.strata.keys.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending }) ?? [String]()
+        return first?.strata.keys.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending }) ?? [String]()
     }
     
-    /**
-     Determines if any the data are adult or family
-     - Returns: A Bool if at least one of the indiviudals has a non-empty value for offspring
-     */
-    var isFamily: Bool {
-        return compactMap { $0.offspring }.count > 0
-    }
-     
+    
 
     /**
      All keys for individual including loci and coordinates.
@@ -74,6 +61,7 @@ public extension Array where Element == Individual {
      */
     var allKeys: [String] {
         var ret = [String]()
+        
         ret.append(contentsOf: strataKeys)
         ret.append("Longitude")
         ret.append("Latitude")

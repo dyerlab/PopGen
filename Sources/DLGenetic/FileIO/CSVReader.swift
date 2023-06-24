@@ -36,12 +36,7 @@ public struct CSVReader {
                 let ind = Individual()
                 for col in dcol.strata {
                     let key = header[col]
-                    if key == "Population" {
-                        ind.stratum = vals[col]
-                    }
-                    else if key == "Offspring" {
-                        ind.offspring = vals[col]
-                    }
+                    ind.strata[key] = vals[col]
                 }
                 for col in dcol.loci {
                     ind.loci[ header[col] ] = Genotype(raw: vals[col] )
