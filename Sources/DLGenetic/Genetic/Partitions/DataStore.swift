@@ -1115,34 +1115,44 @@ extension DataStore {
     }
     
     
-    
+    public static func DefaultBaja() -> [Individual] {
+        let data = DataStore().bajaData()
+        var ret = [Individual]()
+        
+        
+            for row in data {
+                let ind = Individual()
+                ind.stratum = row[1]
+                if let lat = Double(row[2]),
+                   let lon = Double(row[3])
+                {
+                    ind.coord = Coordinate(longitude: lon, latitude: lat)
+                }
+                
+                ind.loci["LTRS"] = Genotype(raw: row[4])
+                ind.loci["WNT"] = Genotype(raw: row[5])
+                ind.loci["EN"] = Genotype(raw: row[6])
+                ind.loci["EF"] = Genotype(raw: row[7])
+                ind.loci["ZMP"] = Genotype(raw: row[8])
+                ind.loci["AML"] = Genotype(raw: row[9])
+                ind.loci["ATPS"] = Genotype(raw: row[10])
+                ind.loci["MP20"] = Genotype(raw: row[11])
+                
+                ret.append( ind )
+                
+            }
+        
+        return ret
+    }
     
     public static func Default() -> DataStore {
         let store = DataStore()
-        let data = store.bajaData()
+        let data = DefaultBaja()
         
-        for row in data {
-            let ind = Individual()
-            ind.stratum = row[1]
-            if let lat = Double(row[2]),
-               let lon = Double(row[3])
-            {
-                ind.coord = Coordinate(longitude: lon, latitude: lat)
-            }
-            
-            ind.loci["LTRS"] = Genotype(raw: row[4])
-            ind.loci["WNT"] = Genotype(raw: row[5])
-            ind.loci["EN"] = Genotype(raw: row[6])
-            ind.loci["EF"] = Genotype(raw: row[7])
-            ind.loci["ZMP"] = Genotype(raw: row[8])
-            ind.loci["AML"] = Genotype(raw: row[9])
-            ind.loci["ATPS"] = Genotype(raw: row[10])
-            ind.loci["MP20"] = Genotype(raw: row[11])
-            
+        for ind in data {
             let stratum = store.strata[ ind.stratum, default: Stratum(name: ind.stratum) ]
             stratum.addIndividual(ind: ind )
             store.strata[ ind.stratum ] = stratum
-            
         }
         
         return store
