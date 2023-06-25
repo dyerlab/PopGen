@@ -34,7 +34,9 @@ import XCTest
 class IndividualTests: XCTestCase {
     func testNull() throws {
         let ind = Individual()
-        XCTAssertNil(ind.coord)
+        XCTAssertNil(ind.latitude)
+        XCTAssertNil(ind.longitude)
+        
         XCTAssertEqual(ind.loci.keys.sorted(), [String]())
         XCTAssertEqual(ind.strata, [String:String]())
     }
@@ -42,15 +44,16 @@ class IndividualTests: XCTestCase {
     func testDefault() throws {
         let ind = Individual.Default()
         XCTAssertEqual(ind.strata["Population"], "RVA")
-        XCTAssertEqual(ind.coord!.latitude, 36.0)
-        XCTAssertEqual(ind.coord!.longitude, -77.0)
+        XCTAssertEqual(ind.latitude!, 36.0)
+        XCTAssertEqual(ind.longitude!, -77.0)
         XCTAssertEqual(ind.loci.keys.sorted(), ["LTRS", "WNT", "EN", "EF", "ZMP", "AML"].sorted())
         print("\(ind)")
     }
     
     func testCoordinates() throws {
         let ind = Individual()
-        XCTAssertNil( ind.coord )
+        XCTAssertNil( ind.latitude )
+        XCTAssertNil( ind.longitude )
         XCTAssertNil( ind.location )
         XCTAssertFalse( ind.isSpatial )
     }

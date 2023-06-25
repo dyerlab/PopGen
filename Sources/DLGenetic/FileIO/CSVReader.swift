@@ -44,7 +44,8 @@ public struct CSVReader {
                 if dcol.isSpatial,
                    let lat = Double(vals[dcol.latitude!]),
                    let lon = Double( vals[dcol.longitude!]) {
-                    ind.coord = Coordinate(longitude: lon, latitude: lat)
+                    ind.latitude = lat
+                    ind.longitude = lon
                 }
                 
                 // Add the individual

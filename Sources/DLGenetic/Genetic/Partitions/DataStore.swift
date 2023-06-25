@@ -49,6 +49,10 @@ public class DataStore: Codable, Identifiable  {
     public var locusKeys: [String] {
         return individuals.locusKeys
     }
+    
+    public var locations: [Location] {
+        return self.individuals.compactMap { $0.location }
+    }
 
     
     public init() { }
@@ -1023,7 +1027,8 @@ extension DataStore {
                 if let lat = Double(row[2]),
                    let lon = Double(row[3])
                 {
-                    ind.coord = Coordinate(longitude: lon, latitude: lat)
+                    ind.latitude = lat
+                    ind.longitude = lon
                 }
                 
                 ind.loci["LTRS"] = Locus(raw: row[4])

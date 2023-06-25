@@ -69,14 +69,7 @@ public extension Array where Element == Individual {
         return ret
     }
 
-    /**
-     All locations
-     - Returns: Array of `CLLocationCoordinate2D` objects from all individuals
-     */
-    var spatialLocations: [CLLocationCoordinate2D] {
-        let coords = compactMap { $0.coord }
-        return coords.compactMap { CLLocationCoordinate2D(coordinate: $0) }
-    }
+   
 
     /**
      Get all the genotypes for a single locus

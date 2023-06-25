@@ -35,7 +35,8 @@ import CoreLocation
 
 public class Individual: Codable, Identifiable {
     public var id: UUID
-    public var coord: Coordinate?
+    public var latitude: CLLocationDegrees?
+    public var longitude: CLLocationDegrees?
     
     public var loci: [String: Locus]
     public var strata: [String: String]
@@ -48,12 +49,22 @@ public class Individual: Codable, Identifiable {
         return strata.keys.sorted { $0.localizedStandardCompare($1) == .orderedAscending }
     }
     public var isSpatial: Bool {
-        return coord != nil
+        return longitude != nil && latitude != nil
     }
     
     public var location: Location? {
-        if let coord = coord {
-            return Location(name: id.uuidString, coordinate: CLLocationCoordinate2D(coordinate: coord))
+        if let coord = self.coordinate {
+            return Location(name: id.uuidString,
+                            coordinate: coord )
+        } else {
+            return nil
+        }
+    }
+    
+    public var coordinate: CLLocationCoordinate2D? {
+        if let lat = latitude,
+           let lon = longitude {
+            return CLLocationCoordinate2D( latitude: lat, longitude: lon)
         } else {
             return nil
         }
@@ -69,7 +80,8 @@ public class Individual: Codable, Identifiable {
 
     enum CodingKeys: String, CodingKey {
         case id
-        case coord
+        case latitude
+        case longitude
         case strata
         case loci
     }
@@ -77,7 +89,8 @@ public class Individual: Codable, Identifiable {
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(UUID.self, forKey: .id)
-        coord = try values.decode(Coordinate.self, forKey: .coord)
+        latitude = try values.decode( CLLocationDegrees.self, forKey: .latitude)
+        longitude = try values.decode( CLLocationDegrees.self, forKey: .longitude)
         strata = try values.decode(Dictionary.self, forKey: .strata)
         loci = try values.decode(Dictionary.self, forKey: .loci)
     }
@@ -85,7 +98,8 @@ public class Individual: Codable, Identifiable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
-        try container.encode(coord, forKey: .coord)
+        try container.encode(latitude, forKey: .latitude)
+        try container.encode(longitude, forKey: .longitude)
         try container.encode(strata, forKey: .strata)
         try container.encode(loci, forKey: .loci)
     }
@@ -111,9 +125,13 @@ extension Individual: CustomStringConvertible {
         for key in strata.keys.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending }) {
             ret.append(String("\(strata[key]!)"))
         }
+    
+        if let lat = latitude {
+            ret.append(String("\(lat)"))
+        }
         
-        if let coord = coord {
-            ret.append(String("\(coord)"))
+        if let lon = longitude {
+            ret.append(String("\(lon)"))
         }
 
         for key in loci.keys.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending }) {
@@ -128,7 +146,8 @@ public extension Individual {
     
     static func Default() -> Individual {
         let ind = Individual()
-        ind.coord = Coordinate(longitude: -77, latitude: 36)
+        ind.latitude = 36.0
+        ind.longitude = -77.0
         ind.strata["Population"] = "RVA"
 
         let loci = ["1:1", "1:1", "1:2",

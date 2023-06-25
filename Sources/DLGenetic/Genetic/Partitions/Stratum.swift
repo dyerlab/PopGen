@@ -149,16 +149,7 @@ extension Stratum: Hashable {
 public extension Stratum {
     
     var coordinates: [CLLocationCoordinate2D] {
-        if self.isFamily {
-            var ret = [CLLocationCoordinate2D]()
-            if let mom = mother,
-               let coord = mom.coord {
-                ret.append( CLLocationCoordinate2D(coordinate: coord) )
-            }
-            return ret
-        } else {
-            return self.individuals.spatialLocations
-        }
+        return self.individuals.compactMap { $0.coordinate }
     }
     
     var region: MKCoordinateRegion {
@@ -273,7 +264,9 @@ public extension Stratum {
             if let lat = Double(raw[i][1]),
                let lon = Double(raw[i][2])
             {
-                ind.coord = Coordinate(longitude: lon, latitude: lat)
+                ind.latitude = lat
+                ind.longitude = lon
+
             }
             for j in 3 ..< 11 {
                 ind.loci[header[j]] = Locus(raw: raw[i][j])
