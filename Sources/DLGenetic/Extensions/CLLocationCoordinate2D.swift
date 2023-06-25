@@ -30,14 +30,6 @@
 import CoreLocation
 import Foundation
 
-extension CLLocationCoordinate2D {
-    /// Override convience intiializer from coordinate
-    init(coordinate: Coordinate) {
-        self.init()
-        longitude = coordinate.longitude
-        latitude = coordinate.latitude 
-    }
-}
 
 extension CLLocationCoordinate2D: Equatable {
     /// Public determination of equality of two coordinates
