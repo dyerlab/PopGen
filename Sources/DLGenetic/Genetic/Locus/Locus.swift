@@ -31,7 +31,7 @@
 import Foundation
 import DLMatrix
 
-public struct Genotype: Codable, Equatable, CustomStringConvertible {
+public struct Locus: Codable, Equatable, CustomStringConvertible {
     /// Keeping the alleles as a diploid set of strings.
     public var left: String = ""
     public var right: String = ""
@@ -108,7 +108,7 @@ public struct Genotype: Codable, Equatable, CustomStringConvertible {
     }
 
     /// Equatable means that all alleles are identical
-    public static func == (lhs: Genotype, rhs: Genotype) -> Bool {
+    public static func == (lhs: Locus, rhs: Locus) -> Bool {
         return lhs.left == rhs.left && lhs.right == rhs.right
     }
 
@@ -137,7 +137,7 @@ public struct Genotype: Codable, Equatable, CustomStringConvertible {
         masking = .NoMasking
     }
 
-    public mutating func setMasking(parent: Genotype) {
+    public mutating func setMasking(parent: Locus) {
         if isEmpty || parent.isEmpty {
             masking = .MissingData
         } else if self == parent {
@@ -177,7 +177,7 @@ public struct Genotype: Codable, Equatable, CustomStringConvertible {
 
 // MARK: - Operators
 
-public extension Genotype {
+public extension Locus {
     /**
      Random mating of two genotypes.  Both must be diploid
      - Parameters:
@@ -185,49 +185,49 @@ public extension Genotype {
       - parent2: Second genotype
      - Returns: Random offspring genotype.
      */
-    static func + (parent1: Genotype, parent2: Genotype) -> Genotype {
+    static func + (parent1: Locus, parent2: Locus) -> Locus {
         if parent1.ploidy != .Diploid || parent2.ploidy != .Diploid {
-            return Genotype()
+            return Locus()
         }
 
         let left = Bool.random() == true ? parent1.left : parent1.right
         let right = Bool.random() == true ? parent2.left : parent2.right
 
-        return Genotype(alleles: (left, right))
+        return Locus(alleles: (left, right))
     }
 }
 
-extension Genotype {
-    public static func DefaultNULL() -> Genotype {
-        return Genotype()
+extension Locus {
+    public static func DefaultNULL() -> Locus {
+        return Locus()
     }
 
-    public static func DefaultHaploid() -> Genotype {
-        return Genotype(raw: "A")
+    public static func DefaultHaploid() -> Locus {
+        return Locus(raw: "A")
     }
 
-    public static func DefaultHeterozygote() -> Genotype {
-        return Genotype(alleles: ("A", "B"))
+    public static func DefaultHeterozygote() -> Locus {
+        return Locus(alleles: ("A", "B"))
     }
 
-    public static func DefaultHomozygote() -> Genotype {
-        return Genotype(alleles: ("A", "A"))
+    public static func DefaultHomozygote() -> Locus {
+        return Locus(alleles: ("A", "A"))
     }
 
-    public static func DefaultHeterozygoteMomLeft() -> Genotype {
-        var geno = Genotype(raw: "A:B")
+    public static func DefaultHeterozygoteMomLeft() -> Locus {
+        var geno = Locus(raw: "A:B")
         geno.masking = .MotherLeft
         return geno
     }
 
-    public static func DefaultHeterozygoteMomRight() -> Genotype {
-        var geno = Genotype(raw: "A:B")
+    public static func DefaultHeterozygoteMomRight() -> Locus {
+        var geno = Locus(raw: "A:B")
         geno.masking = .MotherRight
         return geno
     }
 
-    public static func DefaultHeterozygoteUndefined() -> Genotype {
-        var geno = Genotype(raw: "A:B")
+    public static func DefaultHeterozygoteUndefined() -> Locus {
+        var geno = Locus(raw: "A:B")
         geno.masking = .Undefined
         return geno
     }

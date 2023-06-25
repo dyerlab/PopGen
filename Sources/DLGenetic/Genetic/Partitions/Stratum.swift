@@ -37,7 +37,7 @@ public class Stratum: Codable, Identifiable {
     
     public var mother: Individual?
     public var individuals: [Individual] = []
-    public var frequencies: [String: AlleleFrequencies] = [:]
+    public var frequencies: [String: LocusFrequencies] = [:]
     
     /// TODO: Fix this part for substrata
     subscript(index: Int) -> Individual {
@@ -97,7 +97,7 @@ public extension Stratum {
         for locus in ind.loci.keys.sorted() {
             if let geno = ind.loci[locus] {
                 frequencies[locus,
-                            default: AlleleFrequencies()].addGenotype(geno: geno)
+                            default: LocusFrequencies()].addGenotype(geno: geno)
             }
         }
         individuals.append(ind)
@@ -276,7 +276,7 @@ public extension Stratum {
                 ind.coord = Coordinate(longitude: lon, latitude: lat)
             }
             for j in 3 ..< 11 {
-                ind.loci[header[j]] = Genotype(raw: raw[i][j])
+                ind.loci[header[j]] = Locus(raw: raw[i][j])
             }
             arapat.addIndividual(ind: ind)
         }

@@ -32,7 +32,7 @@ import DLMatrix
 
 public class DataStore: Codable, Identifiable  {
     public var individuals = [Individual]()
-    public var frequencies = [String: AlleleFrequencies]()
+    public var frequencies = Frequencies()
     
     public var count: Int {
         return individuals.count
@@ -70,6 +70,7 @@ public class DataStore: Codable, Identifiable  {
     }
 
     public func addIndiviudal( ind: Individual ) {
+        frequencies.addIndividual(ind: ind )
         individuals.append( ind )
     }
 }
@@ -1025,14 +1026,14 @@ extension DataStore {
                     ind.coord = Coordinate(longitude: lon, latitude: lat)
                 }
                 
-                ind.loci["LTRS"] = Genotype(raw: row[4])
-                ind.loci["WNT"] = Genotype(raw: row[5])
-                ind.loci["EN"] = Genotype(raw: row[6])
-                ind.loci["EF"] = Genotype(raw: row[7])
-                ind.loci["ZMP"] = Genotype(raw: row[8])
-                ind.loci["AML"] = Genotype(raw: row[9])
-                ind.loci["ATPS"] = Genotype(raw: row[10])
-                ind.loci["MP20"] = Genotype(raw: row[11])
+                ind.loci["LTRS"] = Locus(raw: row[4])
+                ind.loci["WNT"] = Locus(raw: row[5])
+                ind.loci["EN"] = Locus(raw: row[6])
+                ind.loci["EF"] = Locus(raw: row[7])
+                ind.loci["ZMP"] = Locus(raw: row[8])
+                ind.loci["AML"] = Locus(raw: row[9])
+                ind.loci["ATPS"] = Locus(raw: row[10])
+                ind.loci["MP20"] = Locus(raw: row[11])
                 
                 ret.append( ind )
                 

@@ -61,18 +61,18 @@ class StratumTests: XCTestCase {
 
     func testInitFamily() throws {
         let mom = Individual()
-        mom.loci["Loc1"] = Genotype(raw: "A:A")
-        mom.loci["Loc2"] = Genotype(raw: "A:B")
+        mom.loci["Loc1"] = Locus(raw: "A:A")
+        mom.loci["Loc2"] = Locus(raw: "A:B")
 
         let family = Stratum(mom: mom, name: "Default")
 
         let off1 = Individual()
-        off1.loci["Loc1"] = Genotype(raw: "A:A")
-        off1.loci["Loc2"] = Genotype(raw: "A:B")
+        off1.loci["Loc1"] = Locus(raw: "A:A")
+        off1.loci["Loc2"] = Locus(raw: "A:B")
 
         family.addOffspring(offspring: off1)
-        XCTAssertEqual( off1.loci["Loc1", default: Genotype()].masking, .MotherLeft )
-        XCTAssertEqual( off1.loci["Loc2", default: Genotype()].masking, .Undefined )
+        XCTAssertEqual( off1.loci["Loc1", default: Locus()].masking, .MotherLeft )
+        XCTAssertEqual( off1.loci["Loc2", default: Locus()].masking, .Undefined )
 
     }
 

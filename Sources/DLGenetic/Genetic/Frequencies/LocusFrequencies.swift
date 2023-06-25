@@ -31,7 +31,7 @@
 import Foundation
 import DLMatrix
 
-public struct AlleleFrequencies: Codable {
+public struct LocusFrequencies: Codable {
     public var genotypes = [String:Double]()
     private var counts = [String: Double]()
     private var N = 0.0
@@ -55,7 +55,7 @@ public struct AlleleFrequencies: Codable {
 
     public init() {}
     
-    public init( freqs: [AlleleFrequencies] ) {
+    public init( freqs: [LocusFrequencies] ) {
         for freq in freqs {
             self.N = self.N + freq.N
             self.numHets = self.numHets + freq.numHets
@@ -69,19 +69,19 @@ public struct AlleleFrequencies: Codable {
         }
     }
 
-    public init(genotypes: [Genotype] ) {
+    public init(genotypes: [Locus] ) {
         for geno in genotypes {
             addGenotype(geno: geno)
         }
     }
 
-    public mutating func addGenotypes(genos: [Genotype]) {
+    public mutating func addGenotypes(genos: [Locus]) {
         genos.forEach { geno in
             self.addGenotype(geno: geno)
         }
     }
 
-    public mutating func addGenotype(geno: Genotype) {
+    public mutating func addGenotype(geno: Locus) {
         
         if !geno.isEmpty && geno.ploidy == .Diploid {
             self.genotypes[ geno.description ] = self.genotypes[ geno.description, default: 0.0] + 1
@@ -132,7 +132,7 @@ public struct AlleleFrequencies: Codable {
     }
 }
 
-extension AlleleFrequencies: CustomStringConvertible {
+extension LocusFrequencies: CustomStringConvertible {
     public var description: String {
         var ret = "Frequencies:\n"
         for allele in alleles {
@@ -151,18 +151,18 @@ extension AlleleFrequencies: CustomStringConvertible {
     }
 }
 
-public extension AlleleFrequencies {
-    static func Default() -> AlleleFrequencies {
+public extension LocusFrequencies {
+    static func Default() -> LocusFrequencies {
         let data = DataStore.Default()
         let locus = data.individuals.locusKeys.first!
         let genos = data.individuals.getGenotypes(named: locus)
-        let freqs = AlleleFrequencies(genotypes: genos)
+        let freqs = LocusFrequencies(genotypes: genos)
         return freqs
     }
 }
 
 
-extension AlleleFrequencies: MatrixConvertible {
+extension LocusFrequencies: MatrixConvertible {
     
     public func asMatrix() -> Matrix {
         let theAlleles = self.alleles

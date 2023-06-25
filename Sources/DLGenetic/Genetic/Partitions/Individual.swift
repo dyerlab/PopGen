@@ -37,7 +37,7 @@ public class Individual: Codable, Identifiable {
     public var id: UUID
     public var coord: Coordinate?
     
-    public var loci: [String: Genotype]
+    public var loci: [String: Locus]
     public var strata: [String: String]
     
     
@@ -63,7 +63,7 @@ public class Individual: Codable, Identifiable {
     /// Default initiatiator
     public init() {
         id = UUID()
-        loci = [String: Genotype]()
+        loci = [String: Locus]()
         strata = [String:String]()
     }
 
@@ -137,7 +137,7 @@ public extension Individual {
                      "EF", "ZMP", "AML"]
 
         for i in 0 ..< 6 {
-            ind.loci[names[i]] = Genotype(raw: loci[i])
+            ind.loci[names[i]] = Locus(raw: loci[i])
         }
 
         return ind

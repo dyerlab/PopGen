@@ -36,7 +36,7 @@ class FrequencyTests: XCTestCase {
         let data = Stratum.DefaultStratum()
 
         XCTAssertEqual(data.frequencies.count, 8)
-        let freqs = data.frequencies["LTRS", default: AlleleFrequencies()]
+        let freqs = data.frequencies["LTRS", default: LocusFrequencies()]
         XCTAssertEqual(freqs.alleles, ["1"])
         XCTAssertEqual(freqs.frequency(allele: "1"), 1.0)
         XCTAssertEqual(freqs.frequency(allele: "0"), 0.0)
@@ -50,7 +50,7 @@ class FrequencyTests: XCTestCase {
         let data = Stratum.DefaultStratum()
 
         XCTAssertEqual(data.frequencies.count, 8)
-        let freqs = data.frequencies["MP20", default: AlleleFrequencies()]
+        let freqs = data.frequencies["MP20", default: LocusFrequencies()]
         XCTAssertEqual(freqs.alleles, ["5", "7"])
         XCTAssertEqual(freqs.frequency(allele: "1"), 0.0)
         XCTAssertEqual(freqs.frequency(allele: "5"), 5.0 / 20.0)
@@ -79,7 +79,7 @@ class FrequencyTests: XCTestCase {
     
     func testMatrix() throws {
         let data = Stratum.DefaultStratum()
-        let freqs = data.frequencies["MP20", default: AlleleFrequencies()]
+        let freqs = data.frequencies["MP20", default: LocusFrequencies()]
         let fMat = freqs.asMatrix()
         XCTAssertEqual( fMat.cols, 2)
         XCTAssertEqual( fMat.rows, 1)

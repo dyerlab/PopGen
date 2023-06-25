@@ -45,7 +45,7 @@ public struct DataColumns {
             }
             else {
                 for i in 1 ..< raw.count {
-                    if Genotype.canBeGenotype(raw: raw[i][col]) {
+                    if Locus.canBeGenotype(raw: raw[i][col]) {
                         loci.append( col )
                         break
                     }

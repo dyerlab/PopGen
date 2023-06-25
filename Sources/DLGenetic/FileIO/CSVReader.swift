@@ -39,7 +39,7 @@ public struct CSVReader {
                     ind.strata[key] = vals[col]
                 }
                 for col in dcol.loci {
-                    ind.loci[ header[col] ] = Genotype(raw: vals[col] )
+                    ind.loci[ header[col] ] = Locus(raw: vals[col] )
                 }
                 if dcol.isSpatial,
                    let lat = Double(vals[dcol.latitude!]),

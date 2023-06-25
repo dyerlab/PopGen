@@ -29,8 +29,8 @@
 
 import SwiftUI
 
-struct GenotypeView: View {
-    @Binding var genotype: Genotype
+struct LocusView: View {
+    @Binding var genotype: Locus
     @State var reduced: Bool
 
     var body: some View {
@@ -49,12 +49,12 @@ struct GenotypeView: View {
 
 struct GenotypeView_Previews: PreviewProvider {
     static var previews: some View {
-        GenotypeView(genotype: .constant(Genotype.DefaultNULL()), reduced: false)
-        GenotypeView(genotype: .constant(Genotype.DefaultHaploid()), reduced: false)
-        GenotypeView(genotype: .constant(Genotype.DefaultHomozygote()), reduced: false)
-        GenotypeView(genotype: .constant(Genotype.DefaultHeterozygote()), reduced: true)
-        GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteMomLeft()), reduced: true)
-        GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteMomRight()), reduced: true)
-        GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteUndefined()), reduced: true)
+        LocusView(genotype: .constant(Locus.DefaultNULL()), reduced: false)
+        LocusView(genotype: .constant(Locus.DefaultHaploid()), reduced: false)
+        LocusView(genotype: .constant(Locus.DefaultHomozygote()), reduced: false)
+        LocusView(genotype: .constant(Locus.DefaultHeterozygote()), reduced: true)
+        LocusView(genotype: .constant(Locus.DefaultHeterozygoteMomLeft()), reduced: true)
+        LocusView(genotype: .constant(Locus.DefaultHeterozygoteMomRight()), reduced: true)
+        LocusView(genotype: .constant(Locus.DefaultHeterozygoteUndefined()), reduced: true)
     }
 }

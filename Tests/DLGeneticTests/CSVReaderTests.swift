@@ -59,16 +59,7 @@ final class CSVReaderTests: XCTestCase {
         let ds = reader.asDataStore()
         XCTAssertNotNil( ds )
         XCTAssertEqual( ds?.count ?? 0, 363)
-        XCTAssertEqual( ds?.strataKeys ?? [""], ["9", "12", "32", "48",
-                                                 "51", "58", "64", "73",
-                                                 "75", "77", "84", "88",
-                                                 "89", "93", "98", "101",
-                                                 "102", "153", "156", "157",
-                                                 "159", "160", "161", "162",
-                                                 "163", "164", "165", "166",
-                                                 "168", "169", "171", "173",
-                                                 "175", "177", "Aqu", "Const",
-                                                 "ESan", "Mat", "SFr"])
+        XCTAssertEqual( ds?.strataKeys ?? [""], ["Cluster","Population","Species"])
         
     }
 

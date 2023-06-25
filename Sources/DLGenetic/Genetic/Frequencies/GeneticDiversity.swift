@@ -41,7 +41,7 @@ public struct GeneticDiversity: Hashable {
 
     public init() {}
 
-    public init(frequencies: AlleleFrequencies) {
+    public init(frequencies: LocusFrequencies) {
         let alleles = frequencies.alleles
         let freqs = frequencies.frequencies(alleles: alleles)
 
@@ -78,7 +78,7 @@ extension GeneticDiversity: CustomStringConvertible {
 public extension GeneticDiversity {
     
     static func Default() -> GeneticDiversity {
-        let freq = AlleleFrequencies.Default()
+        let freq = LocusFrequencies.Default()
         let diversity = GeneticDiversity(frequencies: freq)
         return diversity
     }

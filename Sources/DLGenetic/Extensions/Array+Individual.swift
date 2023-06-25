@@ -81,8 +81,8 @@ public extension Array where Element == Individual {
     /**
      Get all the genotypes for a single locus
      */
-    func getGenotypes(named: String) -> [Genotype] {
-        return compactMap { $0.loci[named, default: Genotype()] }
+    func getGenotypes(named: String) -> [Locus] {
+        return compactMap { $0.loci[named, default: Locus()] }
     }
 
     /**

@@ -9,23 +9,23 @@ import Foundation
 
 public class Frequencies {
     
-    public var locusFrequencies: [String: AlleleFrequencies]
+    public var locusFrequencies: [String: LocusFrequencies]
     
     
     init() {
-        locusFrequencies = [String:AlleleFrequencies]()
+        locusFrequencies = [String:LocusFrequencies]()
     }
     
     public func addIndividual( ind: Individual ) {
         for locus in ind.locusNames {
             if let loc = ind.loci[locus] {
-                locusFrequencies[locus, default: AlleleFrequencies() ].addGenotype(geno: loc )
+                locusFrequencies[locus, default: LocusFrequencies() ].addGenotype(geno: loc )
             }
         }
     }
     
     
-    public func addLocus( name: String, genos: [Genotype] ) {
-        locusFrequencies[ name, default: AlleleFrequencies() ].addGenotypes(genos: genos )
+    public func addLocus( name: String, genos: [Locus] ) {
+        locusFrequencies[ name, default: LocusFrequencies() ].addGenotypes(genos: genos )
     }
 }

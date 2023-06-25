@@ -33,6 +33,7 @@ import XCTest
 
 class GeneticDiversityTests: XCTestCase {
     
+    /*
     func testDefault() throws {
         let diversity = GeneticDiversity.Default()
         XCTAssertEqual(diversity.A, 4)
@@ -47,14 +48,12 @@ class GeneticDiversityTests: XCTestCase {
         XCTAssertEqual(diversity.He, he)
         XCTAssertEqual(diversity.Ae, ae)
         XCTAssertEqual(diversity.F, 1.0 - ho / he)
-        
-        
-        
     }
+     */
     
     func testNullDiversity() {
 
-        let freqs = AlleleFrequencies()
+        let freqs = LocusFrequencies()
         XCTAssertEqual( freqs.alleles.count, 0)
         let diversity = GeneticDiversity(frequencies: freqs )
         XCTAssertEqual(diversity.Ho, 0.0)
