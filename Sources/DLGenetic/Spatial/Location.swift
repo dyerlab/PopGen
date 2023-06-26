@@ -15,7 +15,7 @@ public struct Location: Identifiable {
     public let name: String
     public let coordinate: CLLocationCoordinate2D
     
-    init(name: String, coordinate: CLLocationCoordinate2D) {
+    public init(name: String, coordinate: CLLocationCoordinate2D) {
         self.name = name
         self.coordinate = coordinate
     }
