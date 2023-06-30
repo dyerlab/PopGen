@@ -69,7 +69,19 @@ public extension Array where Element == Individual {
         return ret
     }
 
-   
+    /**
+     Get indication if it is spatial
+     */
+    var isSpatial: Bool {
+        return self.first?.isSpatial ?? false
+    }
+
+    /**
+     Find out how many have spatial coordinates
+     */
+    var numberWithCoordinates: Int {
+        return self.compactMap { $0.isSpatial == true }.count
+    }
 
     /**
      Get all the genotypes for a single locus
@@ -78,6 +90,8 @@ public extension Array where Element == Individual {
         return compactMap { $0.loci[named, default: Locus()] }
     }
 
+    
+    
     /**
      Get all the strata for a single location
      - Parameters:
