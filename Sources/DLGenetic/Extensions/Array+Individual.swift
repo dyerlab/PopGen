@@ -90,7 +90,23 @@ public extension Array where Element == Individual {
         return compactMap { $0.loci[named, default: Locus()] }
     }
 
+    func levelsForStratum( named: String ) -> [String] {
+        return compactMap { $0.strata[named, default: ""] }.unique().sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending })
+    }
     
+    
+    var locations: [Location] {
+        var ret = [Location]()
+        for ind in self {
+            if ind.isSpatial,
+               let lat = ind.latitude,
+               let lon = ind.longitude  {
+                ret.append( Location(name: ind.id.uuidString,
+                                     coordinate: CLLocationCoordinate2DMake(lat, lon)) )
+            }
+        }
+        return ret
+    }
     
     /**
      Get all the strata for a single location

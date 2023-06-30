@@ -81,6 +81,20 @@ public class DataStore: Codable, Identifiable  {
 
 
 
+public extension DataStore {
+    
+    func individualsAtLevel( strata: String, level: String ) -> [Individual] {
+        var ret = [Individual]()
+        for ind in self.individuals {
+            if ind.strata[ strata ] == level {
+                ret.append( ind )
+            }
+        }
+        return ret
+    }
+    
+}
+
 
 
 
