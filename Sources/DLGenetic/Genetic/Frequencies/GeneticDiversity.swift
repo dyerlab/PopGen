@@ -30,7 +30,8 @@
 import Foundation
 import SwiftUI
 
-public struct GeneticDiversity: Hashable {
+public struct GeneticDiversity: Hashable, Identifiable {
+    public var id = UUID()
     public var N: Int = 0
     public var A: Int = 0
     public var A95: Int = 0
@@ -38,10 +39,11 @@ public struct GeneticDiversity: Hashable {
     public var Ho: Double = 0.0
     public var He: Double = 0.0
     public var F: Double = 0.0
+    public var locus: String = ""
 
     public init() {}
 
-    public init(frequencies: LocusFrequencies) {
+    public init(frequencies: LocusFrequencies, locus: String = "Unknown") {
         let alleles = frequencies.alleles
         let freqs = frequencies.frequencies(alleles: alleles)
 
@@ -54,6 +56,8 @@ public struct GeneticDiversity: Hashable {
         Ho = frequencies.numDiploid > 0 ? frequencies.numHets / frequencies.numDiploid : 0.0
         Ae = A > 0 ? 1.0 / (1.0 - He) : 0.0
         F = He > 0 ? 1.0 - Ho / He : 0.0
+        
+        self.locus = locus
     }
     
 }
@@ -63,7 +67,7 @@ public struct GeneticDiversity: Hashable {
 extension GeneticDiversity: CustomStringConvertible {
     /// Override of description for CustomStringConvertible
     public var description: String {
-        var ret = "Genetic Diversity: \n"
+        var ret = "Genetic Diversity: \(locus)\n"
         ret += String("N: \(N)\n")
         ret += String("A: \(A)\n")
         ret += String("A95: \(A95)\n")
@@ -79,7 +83,7 @@ public extension GeneticDiversity {
     
     static func Default() -> GeneticDiversity {
         let freq = LocusFrequencies.Default()
-        let diversity = GeneticDiversity(frequencies: freq)
+        let diversity = GeneticDiversity(frequencies: freq, locus: "Test")
         return diversity
     }
     

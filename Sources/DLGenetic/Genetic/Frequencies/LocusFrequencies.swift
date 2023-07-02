@@ -49,6 +49,10 @@ public struct LocusFrequencies: Codable {
         }
     }
     
+    public var asDiversity: GeneticDiversity {
+        return GeneticDiversity(frequencies: self)
+    }
+    
     public var isEmpty: Bool {
         return self.N == 0 
     }

@@ -11,6 +11,14 @@ public class Frequencies {
     
     public var locusFrequencies: [String: LocusFrequencies]
     
+    public var locusDiversities: [GeneticDiversity] {
+        var ret = [GeneticDiversity]()
+        for frequency in self.locusFrequencies {
+            ret.append( GeneticDiversity( frequencies: frequency.value, locus: frequency.key ) )
+        }
+        return ret
+    }
+    
     
     init() {
         locusFrequencies = [String:LocusFrequencies]()
@@ -27,5 +35,14 @@ public class Frequencies {
     
     public func addLocus( name: String, genos: [Locus] ) {
         locusFrequencies[ name, default: LocusFrequencies() ].addGenotypes(genos: genos )
+    }
+}
+
+
+
+public extension Frequencies {
+    
+    static var Default: Frequencies {
+        return DataStore.Default().frequencies
     }
 }
