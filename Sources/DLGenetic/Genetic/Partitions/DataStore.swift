@@ -53,9 +53,12 @@ public class DataStore: Codable, Identifiable  {
     public var locations: [Location] {
         return self.individuals.compactMap { $0.location }
     }
-
     
     public init() { }
+    
+    public init( individuals: [Individual] ) {
+        self.individuals.forEach{ self.addIndiviudal(ind: $0) }
+    }
     
 
     
@@ -83,14 +86,27 @@ public class DataStore: Codable, Identifiable  {
 
 public extension DataStore {
     
-    func individualsAtLevel( strata: String, level: String ) -> [Individual] {
+    func individualsAtLevel( stratum: String, level: String ) -> [Individual] {
         var ret = [Individual]()
         for ind in self.individuals {
-            if ind.strata[ strata ] == level {
+            if ind.strata[ stratum ] == level {
                 ret.append( ind )
             }
         }
         return ret
+    }
+    
+    
+    func dataStoreForLevel( stratum: String, level: String ) -> DataStore {
+        return DataStore(individuals: self.individualsAtLevel(stratum: stratum, level: level) )
+    }
+    
+    
+    func sampleSizesForLevel( stratum: String ) -> [String:Int] {
+        let levels = individuals.levelsForStratum(named: stratum)
+        var ret = [String:Int]()
+        levels.forEach{ ret[$0] = individualsAtLevel(stratum: stratum, level: $0).count }
+        return  ret
     }
     
 }
@@ -1041,8 +1057,8 @@ extension DataStore {
                 if let lat = Double(row[2]),
                    let lon = Double(row[3])
                 {
-                    ind.latitude = lat
-                    ind.longitude = lon
+                    ind.latitude = lat + Double.random(in: 0...100) / 10000.0
+                    ind.longitude = lon + Double.random(in: 0...100) / 10000.0
                 }
                 
                 ind.loci["LTRS"] = Locus(raw: row[4])
