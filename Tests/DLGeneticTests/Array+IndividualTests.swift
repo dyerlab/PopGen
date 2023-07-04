@@ -40,7 +40,10 @@ final class Array_IndividualTests: XCTestCase {
         let divLTRS = inds.diversityByStrataLevel(locus: "LTRS", stratumName: "Region")
         XCTAssertEqual( divLTRS.count, 4)
         
-        
+        if let SON = divLTRS.first(where: {$0.label == "SON"} ){
+            print("SONORAN Diversity: \n \(SON.description)")
+        }
+
     }
 
 }

@@ -130,9 +130,7 @@ public extension Array where Element == Individual {
      - Returns: An array of individuals (or empty array) with indiviudals
      */
     func individualsForStratumLevel( stratumName: String, stratumLevel: String) -> [Individual] {
-        
         let ret = filter { $0.strata[ stratumName ] == stratumLevel }
-        print("Filtering: \(stratumName):  \(stratumLevel): \(ret.count)")
         return ret
     }
     
@@ -164,7 +162,6 @@ public extension Array where Element == Individual {
         for stratum in freqs.keys {
             var div = freqs[stratum, default: LocusFrequencies()].asDiversity
             div.label = stratum
-            print("\(div.description)")
             ret.append( div )
         }
         return ret 
