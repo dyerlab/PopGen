@@ -44,7 +44,7 @@ public extension Array where Element == Individual {
     var locusKeys: [String] {
         return first?.loci.keys.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending }) ?? [String]()
     }
-
+    
     /**
      Strata Keys
      - Returns: An array of strata in alphabetical order
@@ -54,7 +54,7 @@ public extension Array where Element == Individual {
     }
     
     
-
+    
     /**
      All keys for individual including loci and coordinates.
      - Returns: Array of keys.
@@ -68,28 +68,28 @@ public extension Array where Element == Individual {
         ret.append(contentsOf: locusKeys)
         return ret
     }
-
+    
     /**
      Get indication if it is spatial
      */
     var isSpatial: Bool {
         return self.first?.isSpatial ?? false
     }
-
+    
     /**
      Find out how many have spatial coordinates
      */
     var numberWithCoordinates: Int {
         return self.compactMap { $0.isSpatial == true }.count
     }
-
+    
     /**
      Get all the genotypes for a single locus
      */
     func getGenotypes(named: String) -> [Locus] {
         return compactMap { $0.loci[named, default: Locus()] }
     }
-
+    
     func levelsForStratum( named: String ) -> [String] {
         return compactMap { $0.strata[named, default: ""] }.unique().sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending })
     }
@@ -111,36 +111,69 @@ public extension Array where Element == Individual {
     /**
      Get all the strata for a single location
      - Parameters:
-      - named: The name of the stratum of interest.
+     - named: The name of the stratum of interest.
      - Returns: An array of values with the stratumfo reach indiviudal.
-     
-    func getStrata(named: String) -> [String] {
-        return compactMap { $0.strata[named, default: ""] }
-    }
      */
-
+    func getStrata( named: String ) -> [String] {
+        return compactMap { $0.strata[named, default: ""]}
+    }
+    
     /**
      Get the levels for a specfic stratum
      - Parameters:
-      - stratum: The Name of the strtatum
+     - stratum: The Name of the strtatum
      - Returns: The set of unique values in the stratum
-    
-    func strataLevels(stratum: String) -> [String] {
-        return Set<String>(getStrata(named: stratum)).unique()
-    }
      */
-
+    func strataLevels( partition: String ) -> [String] {
+        return Set<String>(getStrata(named: partition)).unique()
+    }
+    
+    
     /**
      Gets subset of individuals who have specific hierarchical level
      - Parameters:
-        - stratumName: Name of the hierarchical level to look.
-        - stratumLevel: The specific level for the stratum of interest
+     - stratumName: Name of the hierarchical level to look.
+     - stratumLevel: The specific level for the stratum of interest
      - Returns: An array of individuals (or empty array) with indiviudals
-     
-    func indiviudalsForStratumLevel(stratumName: String, stratumLevel: String) -> [Individual] {
-        let ret = filter { $0.strata[stratumName] == stratumLevel }
-
+     */
+    func individualsForStratumLevel( stratumName: String, stratumLevel: String) -> [Individual] {
+        print("\(stratumName)")
+        print("\(stratumLevel)")
+        let ret = filter { $0.strata[ stratumName ] == stratumLevel }
+        print("\(ret.description)")
         return ret
     }
-     */
+    
+    
+    func lociByStrataLevel( locus: String, stratumName: String) -> [String: [Locus] ] {
+        var ret = [String: [Locus] ]()
+        let levels = self.levelsForStratum(named: stratumName )
+        for level in levels {
+            let inds = individualsForStratumLevel(stratumName: stratumName, stratumLevel: level)
+            let genos = inds.getGenotypes(named: locus )
+            ret[ level ] = genos
+        }
+        return ret
+    }
+    
+    func locusFrequenciesByStrataLevel( locus: String, stratumName: String) -> [String: LocusFrequencies ] {
+        var ret = [String: LocusFrequencies ]()
+        let loci = lociByStrataLevel(locus: locus, stratumName: stratumName )
+        
+        for locusName in loci.keys  {
+            ret[ locusName ] = LocusFrequencies(genotypes: loci[ locusName, default: [Locus]() ] )
+        }
+        return ret
+    }
+    
+    
+    func locusDiversityByStrataLevel( locus: String, stratumName: String) -> [String: GeneticDiversity ] {
+        var ret = [String: GeneticDiversity]()
+        let freqs = locusFrequenciesByStrataLevel(locus: locus, stratumName: stratumName)
+        for locusName in freqs.keys {
+            ret[ locusName ] = freqs[locusName, default: LocusFrequencies()].asDiversity
+        }
+        return ret 
+    }
+    
 }

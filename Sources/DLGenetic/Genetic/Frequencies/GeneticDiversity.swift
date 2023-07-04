@@ -28,6 +28,7 @@
 //  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import Foundation
+import DLMatrix
 import SwiftUI
 
 public struct GeneticDiversity: Hashable, Identifiable {
@@ -59,6 +60,27 @@ public struct GeneticDiversity: Hashable, Identifiable {
         
         self.locus = locus
     }
+    
+}
+
+
+extension GeneticDiversity: MatrixConvertible {
+    
+    public func asMatrix() -> DLMatrix.Matrix {
+        var ret = Matrix(1,7,0.0)
+        ret.rowNames = [locus]
+        ret[0,0] = Double(N)
+        ret[0,1] = Double(A)
+        ret[0,2] = Double(A95)
+        ret[0,3] = Ae
+        ret[0,4] = Ho
+        ret[0,5] = He
+        ret[0,6] = F
+        return ret
+    }
+    
+    
+    
     
 }
 

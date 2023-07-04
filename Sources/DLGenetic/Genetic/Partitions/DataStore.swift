@@ -109,6 +109,24 @@ public extension DataStore {
         return  ret
     }
     
+    func partition( strata: String) -> [String:DataStore] {
+        var ret = [String:DataStore]()
+        let levels = individuals.levelsForStratum(named: strata)
+        levels.forEach{ ret[$0] = DataStore(individuals: individuals.individualsForStratumLevel(stratumName: strata, stratumLevel: $0))}
+        return ret
+    }
+    
+    func strataLocations( strata: String ) -> [String: [Location] ] {
+        var ret = [String: [Location] ]()
+        let levels = individuals.levelsForStratum(named: strata)
+        levels.forEach{ ret[$0] = locationsForPartition(stratum: strata, location: $0) }
+        return ret
+    }
+    
+    func locationsForPartition( stratum: String, location: String) -> [Location] {
+        return individualsAtLevel(stratum: stratum, level: location).locations
+    }
+    
 }
 
 
