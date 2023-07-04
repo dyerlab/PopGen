@@ -87,13 +87,7 @@ public class DataStore: Codable, Identifiable  {
 public extension DataStore {
     
     func individualsAtLevel( stratum: String, level: String ) -> [Individual] {
-        var ret = [Individual]()
-        for ind in self.individuals {
-            if ind.strata[ stratum ] == level {
-                ret.append( ind )
-            }
-        }
-        return ret
+        return individuals.individualsForStratumLevel(stratumName: stratum, stratumLevel: level)
     }
     
     
@@ -103,7 +97,7 @@ public extension DataStore {
     
     
     func sampleSizesForLevel( stratum: String ) -> [String:Int] {
-        let levels = individuals.levelsForStratum(named: stratum)
+        let levels = individuals.strataLevels(partition: stratum)
         var ret = [String:Int]()
         levels.forEach{ ret[$0] = individualsAtLevel(stratum: stratum, level: $0).count }
         return  ret
@@ -111,14 +105,14 @@ public extension DataStore {
     
     func partition( strata: String) -> [String:DataStore] {
         var ret = [String:DataStore]()
-        let levels = individuals.levelsForStratum(named: strata)
-        levels.forEach{ ret[$0] = DataStore(individuals: individuals.individualsForStratumLevel(stratumName: strata, stratumLevel: $0))}
+        let levels = individuals.strataLevels(partition: strata)
+        levels.forEach{ ret[$0] = dataStoreForLevel(stratum: strata, level: $0)}
         return ret
     }
     
     func strataLocations( strata: String ) -> [String: [Location] ] {
         var ret = [String: [Location] ]()
-        let levels = individuals.levelsForStratum(named: strata)
+        let levels = individuals.strataLevels(partition: strata)
         levels.forEach{ ret[$0] = locationsForPartition(stratum: strata, location: $0) }
         return ret
     }
@@ -126,6 +120,7 @@ public extension DataStore {
     func locationsForPartition( stratum: String, location: String) -> [Location] {
         return individualsAtLevel(stratum: stratum, level: location).locations
     }
+    
     
 }
 

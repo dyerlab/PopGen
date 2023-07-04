@@ -40,7 +40,7 @@ public struct GeneticDiversity: Hashable, Identifiable {
     public var Ho: Double = 0.0
     public var He: Double = 0.0
     public var F: Double = 0.0
-    public var locus: String = ""
+    public var label: String = ""
 
     public init() {}
 
@@ -58,7 +58,7 @@ public struct GeneticDiversity: Hashable, Identifiable {
         Ae = A > 0 ? 1.0 / (1.0 - He) : 0.0
         F = He > 0 ? 1.0 - Ho / He : 0.0
         
-        self.locus = locus
+        self.label = locus
     }
     
 }
@@ -67,8 +67,8 @@ public struct GeneticDiversity: Hashable, Identifiable {
 extension GeneticDiversity: MatrixConvertible {
     
     public func asMatrix() -> DLMatrix.Matrix {
-        var ret = Matrix(1,7,0.0)
-        ret.rowNames = [locus]
+        let ret = Matrix(1,7,0.0)
+        ret.rowNames = [label]
         ret[0,0] = Double(N)
         ret[0,1] = Double(A)
         ret[0,2] = Double(A95)
@@ -89,7 +89,7 @@ extension GeneticDiversity: MatrixConvertible {
 extension GeneticDiversity: CustomStringConvertible {
     /// Override of description for CustomStringConvertible
     public var description: String {
-        var ret = "Genetic Diversity: \(locus)\n"
+        var ret = "Genetic Diversity: \(label)\n"
         ret += String("N: \(N)\n")
         ret += String("A: \(A)\n")
         ret += String("A95: \(A95)\n")
