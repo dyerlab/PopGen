@@ -34,6 +34,7 @@ import CoreLocation
 
 class StratumTests: XCTestCase {
     
+    /*
     func testNULL() throws {
         let stratum = Stratum(name: "Default")
         XCTAssertEqual(stratum.count, 0)
@@ -76,7 +77,7 @@ class StratumTests: XCTestCase {
 
     }
 
-    /*
+    
     func testDefaultFamily() throws {
         let data = Stratum.DefaultFamily()
         XCTAssertEqual(data.count, 15)

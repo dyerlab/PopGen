@@ -34,26 +34,35 @@ import XCTest
 
 class DataStoreTests: XCTestCase {
 
-    /*
-    func testAdding() throws {
+    
+    func testInit() throws {
+        let ds = DataStore()
         
-        let data = DataStore()
+        let genos = [ Locus(raw: "A:A"),
+                      Locus(raw: "A:A"),
+                      Locus(raw: "A:A"),
+                      Locus(raw: "A:B"),
+                      Locus(raw: "B:B")
+                    ]
         
-        let mom = Individual.DefaultMom()
-        let off = Individual.DefaultOffspring()
-        
-        data.addIndiviudal(ind: mom )
-        data.addIndiviudal(ind: off)
-        
-        XCTAssertEqual( data.strataKeys, ["Big Bertha"] )
+        for geno in genos {
+            let ind = Individual()
+            ind.loci["ATP"] = geno
+            ds.addIndiviudal(ind: ind)
+        }
 
+        XCTAssertEqual( ds.count, 5 )
+        XCTAssertEqual( ds.frequencies.count, 1)
+        print("ds: \(ds)")
+        
         
     }
-     
+
+    /*
     
     func testNoStratum() throws {
         let data = DataStore()
-        let stratum = data.stratum(named: "Bob")
+        let stratum = data.getStratum(named: "Bob")
         XCTAssertTrue( stratum.isEmpty )
     }
 
@@ -104,10 +113,13 @@ class DataStoreTests: XCTestCase {
         XCTAssertEqual( data.count, 39 )
         
         let fMat = data.allFrequencyMatrixFor(locus: "LTRS")
+        
         XCTAssertEqual( data.count, fMat.rows)
         XCTAssertEqual( fMat.colNames, ["1","2"])
     }
     
+    
+     
     func testGenotypeMatix() throws {
         let data = DataStore.Default()
         let gMat = data.genotypeMatrixFor(locus: "LTRS")
@@ -117,16 +129,9 @@ class DataStoreTests: XCTestCase {
         
         
     }
+     */
 
     
-    
-    func testDefaultFamily() throws {
-    
-        let data = DataStore.DefaultFamily()
-        
-        XCTAssertEqual( data.count, 59)
-        
-    }
-     */
+
     
 }

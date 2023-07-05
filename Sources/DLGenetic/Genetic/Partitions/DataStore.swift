@@ -32,7 +32,7 @@ import DLMatrix
 
 public class DataStore: Codable, Identifiable  {
     public var individuals = [Individual]()
-    public var frequencies = Frequencies()
+    public var frequencies = [Frequencies]()
     
     public var count: Int {
         return individuals.count
@@ -77,7 +77,18 @@ public class DataStore: Codable, Identifiable  {
     }
 
     public func addIndiviudal( ind: Individual ) {
-        frequencies.addIndividual(ind: ind )
+        
+        for locus in ind.locusNames {
+            if let geno = ind.loci[locus] {
+                if var freq = alleleFrequenciesFor(locus: locus) {
+                    freq.addGenotype(geno: geno)
+                } else {
+                    var freq = Frequencies(label: locus)
+                    freq.addGenotype(geno: geno)
+                    self.frequencies.append( freq )
+                }
+            }
+        }
         individuals.append( ind )
     }
 }
@@ -86,15 +97,33 @@ public class DataStore: Codable, Identifiable  {
 
 public extension DataStore {
     
+    func getGenotypesFor( locus: String ) -> [Locus] {
+        return individuals.getGenotypes(named: locus)
+    }
+    
+    func alleleFrequenciesFor( locus: String ) -> Frequencies? {
+        return self.frequencies.first(where: {$0.label == locus} )
+    }
+    
     func getDiversityForAllLoci() -> [GeneticDiversity] {
-        return frequencies.locusDiversities
+        var ret = [GeneticDiversity]()
+        for freq in frequencies {
+            ret.append( GeneticDiversity(frequencies: freq))
+        }
+        return ret
     }
     
     func getDiversityForPartiationsAtLocus( stratum: String, locus: String ) -> [GeneticDiversity] {
-        return individuals.diversityByStrataLevel(locus: locus, stratumName: stratum)
+        var ret = [GeneticDiversity]()
+        
+        for level in individuals.strataLevels(within: stratum) {
+            let inds = individuals.individualsForStratumLevel(stratumName: stratum, stratumLevel: level)
+            let genos = inds.getGenotypes(named: locus)
+            let div = GeneticDiversity( label: stratum, genos: genos )
+            ret.append( div )
+        }
+        return ret
     }
-    
-    
 }
 
 
@@ -108,7 +137,6 @@ public extension DataStore {
     func dataStoreForLevel( stratum: String, level: String ) -> DataStore {
         return DataStore(individuals: self.individualsAtLevel(stratum: stratum, level: level) )
     }
-    
     
     func sampleSizesForLevel( stratum: String ) -> [String:Int] {
         let levels = individuals.strataLevels(within: stratum)
@@ -136,6 +164,16 @@ public extension DataStore {
     }
     
     
+}
+
+
+extension DataStore: CustomStringConvertible {
+    public var description: String {
+        var ret = "DataStore with:\n"
+        ret += " - \(self.individuals.count) individuals"
+        ret += " - \(self.frequencies.count) frequencies"
+        return ret
+    }
 }
 
 

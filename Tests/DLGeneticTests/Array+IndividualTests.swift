@@ -23,7 +23,7 @@ final class Array_IndividualTests: XCTestCase {
         XCTAssertEqual( cts["Region"], 4)
         XCTAssertEqual( cts["Population"], 39)
         
-        XCTAssertEqual( inds.strataLevels(partition: "Region").sorted(), ["CBP", "NBP", "SBP", "SON"] )
+        XCTAssertEqual( inds.strataLevels(within: "Region").sorted(), ["CBP", "NBP", "SBP", "SON"] )
         
         XCTAssertEqual( inds.individualsForStratumLevel(stratumName: "Region", stratumLevel: "SON").count, 38)
         XCTAssertEqual( inds.individualsForStratumLevel(stratumName: "Population", stratumLevel: "Aqu").count, 8)

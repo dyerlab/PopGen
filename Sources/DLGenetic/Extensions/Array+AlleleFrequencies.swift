@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Array where Element == LocusFrequencies {
+extension Array where Element == Frequencies {
     
     /*
     public func totalDiversity() -> GeneticDiversity {
@@ -29,8 +29,8 @@ extension Array where Element == LocusFrequencies {
     }
      */
     
-    public func totalFrequencies() -> LocusFrequencies {
-        return LocusFrequencies(freqs: self )
+    public func totalFrequencies() -> Frequencies {
+        return Frequencies(freqs: self )
     }
     
     public func totalGeneticDiversity() -> GeneticDiversity {

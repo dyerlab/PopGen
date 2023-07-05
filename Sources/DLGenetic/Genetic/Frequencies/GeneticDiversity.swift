@@ -44,21 +44,26 @@ public struct GeneticDiversity: Hashable, Identifiable {
 
     public init() {}
 
-    public init(frequencies: LocusFrequencies, locus: String = "Unknown") {
+    public init( label: String, genos: [Locus]) {
+        self.setParameters( label: label, frequencies: Frequencies(genotypes: genos) )
+    }
+    
+    public init(frequencies: Frequencies ) {
+        self.setParameters( label: frequencies.label, frequencies: frequencies )
+    }
+    
+    private mutating func setParameters( label: String, frequencies: Frequencies ) {
         let alleles = frequencies.alleles
-        let freqs = frequencies.frequencies(alleles: alleles)
-
+        let freqs = frequencies.forAlleles(alleles: alleles)
         N = Int( frequencies.numDiploid )
         A = alleles.count
         A95 = freqs.filter { $0 >= 0.05 }.count
-
-        let p = frequencies.frequencies(alleles: alleles).map { $0 * $0 }
-        He = A > 0 ? 1.0 - p.reduce(0.0, +) : 0.0 
+        let p = frequencies.forAlleles(alleles: alleles).map { $0 * $0 }
+        He = A > 0 ? 1.0 - p.reduce(0.0, +) : 0.0
         Ho = frequencies.numDiploid > 0 ? frequencies.numHets / frequencies.numDiploid : 0.0
         Ae = A > 0 ? 1.0 / (1.0 - He) : 0.0
         F = He > 0 ? 1.0 - Ho / He : 0.0
-        
-        self.label = locus
+        self.label = label
     }
     
 }
@@ -78,15 +83,13 @@ extension GeneticDiversity: MatrixConvertible {
         ret[0,6] = F
         return ret
     }
-    
-    
-    
-    
+
 }
 
 
 
 extension GeneticDiversity: CustomStringConvertible {
+
     /// Override of description for CustomStringConvertible
     public var description: String {
         var ret = "Genetic Diversity: \(label)\n"
@@ -104,8 +107,8 @@ extension GeneticDiversity: CustomStringConvertible {
 public extension GeneticDiversity {
     
     static func Default() -> GeneticDiversity {
-        let freq = LocusFrequencies.Default()
-        let diversity = GeneticDiversity(frequencies: freq, locus: "Test")
+        let freq = Frequencies.Default()
+        let diversity = GeneticDiversity(frequencies: freq )
         return diversity
     }
     

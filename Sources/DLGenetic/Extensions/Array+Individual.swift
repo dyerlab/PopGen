@@ -145,11 +145,11 @@ public extension Array where Element == Individual {
         return ret
     }
     
-    func frequenciesForStrataLevels( locus: String, stratumName: String) -> [String: LocusFrequencies ] {
-        var ret = [String: LocusFrequencies ]()
+    func frequenciesForStrataLevels( locus: String, stratumName: String) -> [String: Frequencies ] {
+        var ret = [String: Frequencies ]()
         let lociForStratum = locusForStrataLevels(locus: locus, stratumName: stratumName )
         for stratumName in lociForStratum.keys  {
-            ret[ stratumName ] = LocusFrequencies(genotypes: lociForStratum[ stratumName, default: [Locus]() ] )
+            ret[ stratumName ] = Frequencies(genotypes: lociForStratum[ stratumName, default: [Locus]() ] )
         }
         return ret
     }
@@ -159,7 +159,7 @@ public extension Array where Element == Individual {
         var ret = [GeneticDiversity]()
         let freqs = frequenciesForStrataLevels(locus: locus, stratumName: stratumName)
         for stratum in freqs.keys {
-            var div = freqs[stratum, default: LocusFrequencies()].asDiversity
+            var div = freqs[stratum, default: Frequencies()].asDiversity
             div.label = stratum
             ret.append( div )
         }

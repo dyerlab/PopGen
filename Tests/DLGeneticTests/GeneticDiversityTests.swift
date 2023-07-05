@@ -53,7 +53,7 @@ class GeneticDiversityTests: XCTestCase {
     
     func testNullDiversity() {
 
-        let freqs = LocusFrequencies()
+        let freqs = Frequencies(label: "Test")
         XCTAssertEqual( freqs.alleles.count, 0)
         let diversity = GeneticDiversity(frequencies: freqs )
         XCTAssertEqual(diversity.Ho, 0.0)

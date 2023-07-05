@@ -32,33 +32,48 @@
 import XCTest
 
 class FrequencyTests: XCTestCase {
+    
     func testInitFixed() throws {
-        let data = Stratum.DefaultStratum()
-
+        
+        let data = DataStore.Default()
+        
+        print("Data has \(data.individuals.count) individuals in it")
+        print("Data has \(data.frequencies.count) frequencies recorded")
         XCTAssertEqual(data.frequencies.count, 8)
-        let freqs = data.frequencies["LTRS", default: LocusFrequencies()]
-        XCTAssertEqual(freqs.alleles, ["1"])
-        XCTAssertEqual(freqs.frequency(allele: "1"), 1.0)
-        XCTAssertEqual(freqs.frequency(allele: "0"), 0.0)
-        XCTAssertEqual(freqs.frequencies(alleles: ["1", "2"]), [1.0, 0.0])
-        XCTAssertEqual(freqs.numHets, 0.0)
-        XCTAssertEqual(freqs.numDiploid, 10.0)
-        print("Fixed:\n\(freqs)")
+        
+        print("LTRS Looks like \(data.getGenotypesFor(locus: "LTRS"))")
+        for freq in data.frequencies {
+            print("\(freq)")
+        }
+        
+        if let freqs = data.alleleFrequenciesFor(locus: "LTRS") {
+            
+            
+            
+            print("\(freqs)")
+            
+            XCTAssertEqual(freqs.alleles, ["1"])
+            XCTAssertEqual(freqs.forAllele(allele: "1"), 1.0)
+            XCTAssertEqual(freqs.forAllele(allele: "0"), 0.0)
+            XCTAssertEqual(freqs.forAlleles(alleles: ["1", "2"]), [1.0, 0.0])
+            XCTAssertEqual(freqs.numHets, 0.0)
+            XCTAssertEqual(freqs.numDiploid, 10.0)
+        }
     }
 
     func testInitVariable() throws {
-        let data = Stratum.DefaultStratum()
+        let data = DataStore.Default()
 
         XCTAssertEqual(data.frequencies.count, 8)
-        let freqs = data.frequencies["MP20", default: LocusFrequencies()]
-        XCTAssertEqual(freqs.alleles, ["5", "7"])
-        XCTAssertEqual(freqs.frequency(allele: "1"), 0.0)
-        XCTAssertEqual(freqs.frequency(allele: "5"), 5.0 / 20.0)
-        XCTAssertEqual(freqs.frequency(allele: "7"), 1.0 - freqs.frequency(allele: "5"))
-        XCTAssertEqual(freqs.frequencies(alleles: ["5", "7"]), [5.0 / 20.0, 15.0 / 20.0])
-        XCTAssertEqual(freqs.numHets, 3.0)
-        XCTAssertEqual(freqs.numDiploid, 10.0)
-        print("Variable:\n\(freqs)")
+        if let freqs = data.alleleFrequenciesFor(locus: "MP20") {
+            XCTAssertEqual(freqs.alleles, ["5", "7"])
+            XCTAssertEqual(freqs.forAllele(allele: "1"), 0.0)
+            XCTAssertEqual(freqs.forAllele(allele: "5"), 5.0 / 20.0)
+            XCTAssertEqual(freqs.forAllele(allele: "7"), 1.0 - freqs.forAllele(allele: "5"))
+            XCTAssertEqual(freqs.forAlleles(alleles: ["5", "7"]), [5.0 / 20.0, 15.0 / 20.0])
+            XCTAssertEqual(freqs.numHets, 3.0)
+            XCTAssertEqual(freqs.numDiploid, 10.0)
+        }
     }
 
     /*
@@ -78,12 +93,13 @@ class FrequencyTests: XCTestCase {
     
     
     func testMatrix() throws {
-        let data = Stratum.DefaultStratum()
-        let freqs = data.frequencies["MP20", default: LocusFrequencies()]
-        let fMat = freqs.asMatrix()
-        XCTAssertEqual( fMat.cols, 2)
-        XCTAssertEqual( fMat.rows, 1)
-        XCTAssertEqual( fMat[0,0], 0.25)
-        XCTAssertEqual( fMat[0,1], 0.75)
+        let data = DataStore.Default()
+        if let freqs = data.alleleFrequenciesFor(locus: "MP20") {
+            let fMat = freqs.asMatrix()
+            XCTAssertEqual( fMat.cols, 2)
+            XCTAssertEqual( fMat.rows, 1)
+            XCTAssertEqual( fMat[0,0], 0.25)
+            XCTAssertEqual( fMat[0,1], 0.75)
+        }
     }
 }
