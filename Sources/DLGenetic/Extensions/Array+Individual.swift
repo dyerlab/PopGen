@@ -50,13 +50,9 @@ public extension Array where Element == Individual {
      - Returns: An array of strata in alphabetical order
      */
     var strataKeys: [String] {
-        
         let keys = first?.strata.keys.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending }) ?? [String]()
-        
         return keys
     }
-    
-    
 
     /**
      Get indication if it is spatial
@@ -76,7 +72,7 @@ public extension Array where Element == Individual {
     var strataCounts: [String: Int] {
         var ret = [String:Int]()
         for stratum in strataKeys {
-            ret[stratum] = strataLevels(partition: stratum).count 
+            ret[stratum] = strataLevels(within: stratum).count
         }
         return ret
     }
@@ -90,9 +86,9 @@ public extension Array where Element == Individual {
         return compactMap { $0.loci[named, default: Locus()] }
     }
     
-    
-    
-    
+    /**
+     All the locations for individuals
+     */
     var locations: [Location] {
         var ret = [Location]()
         for ind in self {
@@ -107,8 +103,11 @@ public extension Array where Element == Individual {
     }
     
 
+    /**
+     Get the levels for this opartition
+     */
     func getStrata( named: String ) -> [String] {
-        return compactMap { $0.strata[named, default: ""]}
+        return compactMap { $0.strata[named, default: ""] }
     }
     
     /**
@@ -117,8 +116,8 @@ public extension Array where Element == Individual {
      - stratum: The Name of the strtatum
      - Returns: The set of unique values in the stratum
      */
-    func strataLevels( partition: String ) -> [String] {
-        return Set<String>(getStrata(named: partition)).unique()
+    func strataLevels( within: String ) -> [String] {
+        return Set<String>(getStrata(named: within)).unique()
     }
     
     
@@ -137,7 +136,7 @@ public extension Array where Element == Individual {
     
     func locusForStrataLevels( locus: String, stratumName: String) -> [String: [Locus] ] {
         var ret = [String: [Locus] ]()
-        let strata = self.strataLevels(partition: stratumName )
+        let strata = self.strataLevels(within: stratumName )
         for stratum in strata {
             let inds = individualsForStratumLevel(stratumName: stratumName, stratumLevel: stratum)
             let genos = inds.getGenotypes(named: locus )
