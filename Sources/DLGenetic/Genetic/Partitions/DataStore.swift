@@ -86,10 +86,24 @@ public class DataStore: Codable, Identifiable  {
 
 public extension DataStore {
     
+    func getDiversityForAllLoci() -> [GeneticDiversity] {
+        return frequencies.locusDiversities
+    }
+    
+    func getDiversityForPartiationsAtLocus( stratum: String, locus: String ) -> [GeneticDiversity] {
+        return individuals.diversityByStrataLevel(locus: locus, stratumName: stratum)
+    }
+    
+    
+}
+
+
+
+public extension DataStore {
+    
     func individualsAtLevel( stratum: String, level: String ) -> [Individual] {
         return individuals.individualsForStratumLevel(stratumName: stratum, stratumLevel: level)
     }
-    
     
     func dataStoreForLevel( stratum: String, level: String ) -> DataStore {
         return DataStore(individuals: self.individualsAtLevel(stratum: stratum, level: level) )
@@ -97,7 +111,7 @@ public extension DataStore {
     
     
     func sampleSizesForLevel( stratum: String ) -> [String:Int] {
-        let levels = individuals.strataLevels(partition: stratum)
+        let levels = individuals.strataLevels(within: stratum)
         var ret = [String:Int]()
         levels.forEach{ ret[$0] = individualsAtLevel(stratum: stratum, level: $0).count }
         return  ret
@@ -105,14 +119,14 @@ public extension DataStore {
     
     func partition( strata: String) -> [String:DataStore] {
         var ret = [String:DataStore]()
-        let levels = individuals.strataLevels(partition: strata)
+        let levels = individuals.strataLevels(within: strata)
         levels.forEach{ ret[$0] = dataStoreForLevel(stratum: strata, level: $0)}
         return ret
     }
     
     func strataLocations( strata: String ) -> [String: [Location] ] {
         var ret = [String: [Location] ]()
-        let levels = individuals.strataLevels(partition: strata)
+        let levels = individuals.strataLevels(within: strata)
         levels.forEach{ ret[$0] = locationsForPartition(stratum: strata, location: $0) }
         return ret
     }
