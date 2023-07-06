@@ -38,6 +38,8 @@ class DataStoreTests: XCTestCase {
     func testInit() throws {
         let ds = DataStore()
         
+        XCTAssertTrue( ds.isEmpty )
+        
         let genos = [ Locus(raw: "A:A"),
                       Locus(raw: "A:A"),
                       Locus(raw: "A:A"),
@@ -51,9 +53,11 @@ class DataStoreTests: XCTestCase {
             ds.addIndiviudal(ind: ind)
         }
 
+        XCTAssertFalse( ds.isEmpty )
         XCTAssertEqual( ds.count, 5 )
         XCTAssertEqual( ds.frequencies.count, 1)
-        print("ds: \(ds)")
+        print("\(ds)")
+        print("\(ds.frequencies.first!)")
         
         
     }

@@ -60,8 +60,6 @@ public class DataStore: Codable, Identifiable  {
         self.individuals.forEach{ self.addIndiviudal(ind: $0) }
     }
     
-
-    
     enum CodingKeys: String, CodingKey {
         case individuals
     }
@@ -80,13 +78,20 @@ public class DataStore: Codable, Identifiable  {
         
         for locus in ind.locusNames {
             if let geno = ind.loci[locus] {
-                if var freq = alleleFrequenciesFor(locus: locus) {
-                    freq.addGenotype(geno: geno)
+                
+                var idx: Int
+                if let i = frequencies.firstIndex(where: {$0.label == locus} ){
+                    idx = i
                 } else {
-                    var freq = Frequencies(label: locus)
-                    freq.addGenotype(geno: geno)
+                    idx = frequencies.count
+                    let freq = Frequencies(label: locus)
                     self.frequencies.append( freq )
                 }
+
+                frequencies[idx].addGenotype(geno: geno)
+            }
+            else {
+                print("Skipping null geno")
             }
         }
         individuals.append( ind )
@@ -100,6 +105,8 @@ public extension DataStore {
     func getGenotypesFor( locus: String ) -> [Locus] {
         return individuals.getGenotypes(named: locus)
     }
+    
+    func getGenotypesForLocalInStratum( locus: String, stratum: String, )
     
     func alleleFrequenciesFor( locus: String ) -> Frequencies? {
         return self.frequencies.first(where: {$0.label == locus} )
@@ -167,11 +174,12 @@ public extension DataStore {
 }
 
 
+
 extension DataStore: CustomStringConvertible {
     public var description: String {
         var ret = "DataStore with:\n"
-        ret += " - \(self.individuals.count) individuals"
-        ret += " - \(self.frequencies.count) frequencies"
+        ret += " - \(self.individuals.count) individuals\n"
+        ret += " - \(self.frequencies.count) frequencies\n"
         return ret
     }
 }
