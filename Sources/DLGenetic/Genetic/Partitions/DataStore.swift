@@ -106,7 +106,6 @@ public extension DataStore {
         return individuals.getGenotypes(named: locus)
     }
     
-    func getGenotypesForLocalInStratum( locus: String, stratum: String, )
     
     func alleleFrequenciesFor( locus: String ) -> Frequencies? {
         return self.frequencies.first(where: {$0.label == locus} )
