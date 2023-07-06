@@ -106,12 +106,15 @@ public extension DataStore {
         return individuals.getGenotypes(named: locus)
     }
     
-    
-    func alleleFrequenciesFor( locus: String ) -> Frequencies? {
-        return self.frequencies.first(where: {$0.label == locus} )
+    func alleleFrequenciesFor( locus: String ) -> Frequencies {
+        return self.frequencies.first(where: {$0.label == locus} ) ?? Frequencies()
     }
     
-    func getDiversityForAllLoci() -> [GeneticDiversity] {
+    func geneticDiversityFor( locus: String ) -> GeneticDiversity {
+        return GeneticDiversity(frequencies: alleleFrequenciesFor(locus: locus) )
+    }
+    
+    func diversityForAllLoci() -> [GeneticDiversity] {
         var ret = [GeneticDiversity]()
         for freq in frequencies {
             ret.append( GeneticDiversity(frequencies: freq))
@@ -119,17 +122,24 @@ public extension DataStore {
         return ret
     }
     
-    func getDiversityForPartiationsAtLocus( stratum: String, locus: String ) -> [GeneticDiversity] {
-        var ret = [GeneticDiversity]()
-        
-        for level in individuals.strataLevels(within: stratum) {
-            let inds = individuals.individualsForStratumLevel(stratumName: stratum, stratumLevel: level)
-            let genos = inds.getGenotypes(named: locus)
-            let div = GeneticDiversity( label: stratum, genos: genos )
-            ret.append( div )
+    func freqquencyForStrataLevels( locus: String, strata: String) -> [Frequencies] {
+        var ret = [Frequencies]()
+        let pops = partition(strata: strata)
+        for pop in pops.keys {
+            ret.append( pops[pop, default: DataStore()].alleleFrequenciesFor(locus: locus) )
         }
         return ret
     }
+    
+    func diversityForStratLevels( locus: String, strata: String ) -> [GeneticDiversity] {
+        var ret =  [GeneticDiversity]()
+        let pops = partition(strata: strata)
+        for pop in pops.keys {
+            ret.append( pops[pop, default: DataStore()].geneticDiversityFor(locus: locus) )
+        }
+        return ret
+    }
+    
 }
 
 
@@ -1542,3 +1552,5 @@ extension DataStore {
         return ret
     }
 }
+
+

@@ -58,11 +58,11 @@ public struct Frequencies: Codable {
         return self.N == 0 
     }
 
-    public init( label: String = "Default" ) {
+    public init( label: String = "Default Frequencies" ) {
         self.label = label
     }
     
-    public init( label: String = "Default", freqs: [Frequencies] ) {
+    public init( label: String = "Default Frequencies", freqs: [Frequencies] ) {
         self.label = label
         for freq in freqs {
             self.N = self.N + freq.N
