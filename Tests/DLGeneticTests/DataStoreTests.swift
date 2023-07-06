@@ -61,6 +61,34 @@ class DataStoreTests: XCTestCase {
         
         
     }
+    
+    func testIndividualsAtLevel() throws {
+        let ds = DataStore.Default()
+        let inds = ds.individualsAtLevel(stratum: "Region", level: "SON")
+        XCTAssertEqual( inds.count, 38)
+    }
+    
+    
+    func testDataStoreForLevel() throws {
+        let ds = DataStore.Default()
+        let son = ds.dataStoreForLevel(stratum: "Region", level: "SON")
+        print(son)
+        XCTAssertEqual( son.count, 38)
+        let inds = ds.individualsAtLevel(stratum: "Region", level: "SON")
+        XCTAssertEqual( inds.count, 38)
+        let son1 = DataStore(individuals: inds )
+        XCTAssertEqual( son1.count, 38)
+        
+    }
+    
+    
+    
+    func testPartitions() throws {
+        let ds = DataStore.Default()
+        let partitions = ds.partition(strata: "Region")
+        XCTAssertEqual( partitions.count, 4 )
+    }
+    
 
     /*
     

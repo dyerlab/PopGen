@@ -57,7 +57,9 @@ public class DataStore: Codable, Identifiable  {
     public init() { }
     
     public init( individuals: [Individual] ) {
-        self.individuals.forEach{ self.addIndiviudal(ind: $0) }
+        for ind in individuals {
+            addIndiviudal(ind: ind)
+        }
     }
     
     enum CodingKeys: String, CodingKey {
@@ -122,7 +124,7 @@ public extension DataStore {
         return ret
     }
     
-    func freqquencyForStrataLevels( locus: String, strata: String) -> [Frequencies] {
+    func frequencyForStrataLevels( locus: String, strata: String) -> [Frequencies] {
         var ret = [Frequencies]()
         let pops = partition(strata: strata)
         for pop in pops.keys {
@@ -151,7 +153,9 @@ public extension DataStore {
     }
     
     func dataStoreForLevel( stratum: String, level: String ) -> DataStore {
-        return DataStore(individuals: self.individualsAtLevel(stratum: stratum, level: level) )
+        let inds = individualsAtLevel(stratum: stratum, level: level)
+        print( inds.count )
+        return DataStore(individuals: inds )
     }
     
     func sampleSizesForLevel( stratum: String ) -> [String:Int] {
@@ -164,7 +168,9 @@ public extension DataStore {
     func partition( strata: String) -> [String:DataStore] {
         var ret = [String:DataStore]()
         let levels = individuals.strataLevels(within: strata)
-        levels.forEach{ ret[$0] = dataStoreForLevel(stratum: strata, level: $0)}
+        for level in levels {
+            ret[level] = dataStoreForLevel(stratum: strata, level: level)
+        }
         return ret
     }
     

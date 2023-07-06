@@ -37,16 +37,17 @@ class FrequencyTests: XCTestCase {
         let data = DataStore.Default()
         XCTAssertEqual(data.frequencies.count, 8)
         
-        if let freqs = data.alleleFrequenciesFor(locus: "LTRS") {
-            print("\(freqs)")
-            XCTAssertEqual(freqs.alleles, ["1","2"])
-            XCTAssertEqual(freqs.forAllele(allele: "1"), 381.0/730.0)
-            XCTAssertEqual(freqs.forAllele(allele: "3"), 0.0)
-            XCTAssertEqual(freqs.forAlleles(alleles: ["2", "4"]), [349.0/730.0, 0.0])
-            XCTAssertEqual(freqs.numHets, 87.0)
-            XCTAssertEqual(freqs.numDiploid, 365.0)
-        }
+        let freqs = data.alleleFrequenciesFor(locus: "LTRS")
+        print("\(freqs)")
+        XCTAssertEqual(freqs.alleles, ["1","2"])
+        XCTAssertEqual(freqs.forAllele(allele: "1"), 381.0/730.0)
+        XCTAssertEqual(freqs.forAllele(allele: "3"), 0.0)
+        XCTAssertEqual(freqs.forAlleles(alleles: ["2", "4"]), [349.0/730.0, 0.0])
+        XCTAssertEqual(freqs.numHets, 87.0)
+        XCTAssertEqual(freqs.numDiploid, 365.0)
+        
     }
-
- 
+    
+    
 }
+
