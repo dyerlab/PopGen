@@ -58,7 +58,7 @@ public class DataStore: Codable, Identifiable  {
     
     public init( individuals: [Individual] ) {
         for ind in individuals {
-            addIndiviudal(ind: ind)
+            addIndividual(ind: ind)
         }
     }
     
@@ -76,7 +76,7 @@ public class DataStore: Codable, Identifiable  {
         try container.encode( individuals, forKey: .individuals)
     }
 
-    public func addIndiviudal( ind: Individual ) {
+    public func addIndividual( ind: Individual ) {
         
         for locus in ind.locusNames {
             if let geno = ind.loci[locus] {
@@ -104,7 +104,7 @@ public class DataStore: Codable, Identifiable  {
 
 public extension DataStore {
     
-    func getGenotypesFor( locus: String ) -> [Locus] {
+    func genotypesFor( locus: String ) -> [Locus] {
         return individuals.getGenotypes(named: locus)
     }
     
@@ -128,7 +128,9 @@ public extension DataStore {
         var ret = [Frequencies]()
         let pops = partition(strata: strata)
         for pop in pops.keys {
-            ret.append( pops[pop, default: DataStore()].alleleFrequenciesFor(locus: locus) )
+            var freq = pops[pop, default: DataStore()].alleleFrequenciesFor(locus: locus)
+            freq.label = pop
+            ret.append( freq )
         }
         return ret
     }
@@ -137,7 +139,9 @@ public extension DataStore {
         var ret =  [GeneticDiversity]()
         let pops = partition(strata: strata)
         for pop in pops.keys {
-            ret.append( pops[pop, default: DataStore()].geneticDiversityFor(locus: locus) )
+            var div = pops[pop, default: DataStore()].geneticDiversityFor(locus: locus)
+            div.label = pop
+            ret.append( div )
         }
         return ret
     }
@@ -154,7 +158,6 @@ public extension DataStore {
     
     func dataStoreForLevel( stratum: String, level: String ) -> DataStore {
         let inds = individualsAtLevel(stratum: stratum, level: level)
-        print( inds.count )
         return DataStore(individuals: inds )
     }
     
@@ -185,7 +188,6 @@ public extension DataStore {
         return individualsAtLevel(stratum: stratum, level: location).locations
     }
     
-    
 }
 
 
@@ -204,7 +206,45 @@ extension DataStore: CustomStringConvertible {
 
 extension DataStore {
     
+    public static func DefaultBaja() -> [Individual] {
+        let data = DataStore().bajaData()
+        var ret = [Individual]()
+        
+            for row in data {
+                let ind = Individual()
+                ind.strata[ "Region" ] = row[0]
+                ind.strata[ "Population" ] = row[1]
+                if let lat = Double(row[2]),
+                   let lon = Double(row[3]) {
+                    ind.latitude = lat + Double.random(in: 0...100) / 10000.0
+                    ind.longitude = lon + Double.random(in: 0...100) / 10000.0
+                }
+                ind.loci["LTRS"] = Locus(raw: row[4])
+                ind.loci["WNT"] = Locus(raw: row[5])
+                ind.loci["EN"] = Locus(raw: row[6])
+                ind.loci["EF"] = Locus(raw: row[7])
+                ind.loci["ZMP"] = Locus(raw: row[8])
+                ind.loci["AML"] = Locus(raw: row[9])
+                ind.loci["ATPS"] = Locus(raw: row[10])
+                ind.loci["MP20"] = Locus(raw: row[11])
+                ret.append( ind )
+            }
+        return ret
+    }
     
+    public static func Default() -> DataStore {
+        let store = DataStore()
+        for ind in DefaultBaja() {
+            store.addIndividual(ind: ind )
+        }
+        return store
+    }
+
+    private func bajaData() -> [[String]] {
+        var ret = mainClade()
+        ret.append(contentsOf: sonoranData() )
+        return ret
+    }
     
     private func dogwoodFamilies() -> [[String]] {
         return [["Mom-1024", "0", "-77.589796", "37.353826", "124:146", "153:157", "128:136", "138:138", "232:232", "177:187", "107:99", "106:108", "130:130"],
@@ -1131,51 +1171,7 @@ extension DataStore {
                 ["Mom-7900", "3759", "-77.540785", "37.426772", "126:134", "153:155", "136:148", "138:138", "232:232", "169:171", "107:117", "106:118", "126:130"] ]
         
     }
-    
-    
-    public static func DefaultBaja() -> [Individual] {
-        let data = DataStore().bajaData()
-        var ret = [Individual]()
-        
-        
-            for row in data {
-                let ind = Individual()
-                ind.strata[ "Region" ] = row[0]
-                ind.strata[ "Population" ] = row[1]
-                if let lat = Double(row[2]),
-                   let lon = Double(row[3])
-                {
-                    ind.latitude = lat + Double.random(in: 0...100) / 10000.0
-                    ind.longitude = lon + Double.random(in: 0...100) / 10000.0
-                }
-                
-                ind.loci["LTRS"] = Locus(raw: row[4])
-                ind.loci["WNT"] = Locus(raw: row[5])
-                ind.loci["EN"] = Locus(raw: row[6])
-                ind.loci["EF"] = Locus(raw: row[7])
-                ind.loci["ZMP"] = Locus(raw: row[8])
-                ind.loci["AML"] = Locus(raw: row[9])
-                ind.loci["ATPS"] = Locus(raw: row[10])
-                ind.loci["MP20"] = Locus(raw: row[11])
-                
-                ret.append( ind )
-                
-            }
-        
-        return ret
-    }
-    
-    public static func Default() -> DataStore {
-        let store = DataStore()
-        
-        for ind in DefaultBaja() {
-            store.addIndiviudal(ind: ind )
-        }
-        
-        return store
-    }
-    
-    
+
     private func mainClade() -> [[String]] {
         return [
             ["NBP", "88", "29.32544972", "-114.2935239", "1:1", "", "2:4", "1:2", "", "", "9:9", "7:7"],
@@ -1551,12 +1547,7 @@ extension DataStore {
         ]
         
     }
-    
-    private func bajaData() -> [[String]] {
-        var ret = mainClade()
-        ret.append(contentsOf: sonoranData() )
-        return ret
-    }
+        
 }
 
 

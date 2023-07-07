@@ -50,7 +50,7 @@ class DataStoreTests: XCTestCase {
         for geno in genos {
             let ind = Individual()
             ind.loci["ATP"] = geno
-            ds.addIndiviudal(ind: ind)
+            ds.addIndividual(ind: ind)
         }
 
         XCTAssertFalse( ds.isEmpty )
@@ -89,7 +89,40 @@ class DataStoreTests: XCTestCase {
         XCTAssertEqual( partitions.count, 4 )
     }
     
+    
+    func testGenotypeGrabAndFrequencies() throws {
+        let ds = DataStore.Default()
+        let genos = ds.genotypesFor(locus: "LTRS" )
+        let freq = Frequencies(label: "LTRS", genotypes: genos)
+        let dsFreqs = ds.frequencies.first(where: {$0.label == "LTRS"} ) ?? Frequencies()
+        XCTAssertEqual( freq, dsFreqs )
+        XCTAssertEqual( freq, ds.alleleFrequenciesFor(locus: "LTRS"))
+    }
+    
+    func testGenotypeDiversityStuff() throws {
+        let ds = DataStore.Default()
+        let divs = ds.diversityForAllLoci()
+        XCTAssertEqual( divs.count, 8)
+        
+    }
+    
+    
+    func testFrequenciesForStrataAtLocus() throws {
+        let ds = DataStore.Default()
+        let ltrs = ds.frequencyForStrataLevels(locus: "LTRS", strata: "Region")
+        XCTAssertEqual( ltrs.count, 4 )
+        for ltr in ltrs { print(ltr) }
+    }
+    
+    func testDiversityForStrataAtLocus() throws {
+        let ds = DataStore.Default()
+        let ltrs = ds.diversityForStratLevels(locus: "LTRS", strata: "Region")
+        XCTAssertEqual( ltrs.count, 4 )
+        for ltr in ltrs { print(ltr) }
+    }
 
+    
+    
     /*
     
     func testNoStratum() throws {
@@ -118,13 +151,10 @@ class DataStoreTests: XCTestCase {
                                           "ESan", "Mat", "SFr"])
         XCTAssertEqual( data.locusKeys, ["AML", "ATPS", "EF", "EN",
                                          "LTRS", "MP20", "WNT", "ZMP"] )
-        
-        
     }
     
     
     func testFrequencies() throws {
-        
         let data = DataStore.Default()
         XCTAssertEqual( data.count, 39 )
         XCTAssertEqual( data.numInds, 365 )
@@ -140,12 +170,9 @@ class DataStoreTests: XCTestCase {
     }
     
     func testFrequencyMatrix() throws {
-        
         let data = DataStore.Default()
         XCTAssertEqual( data.count, 39 )
-        
         let fMat = data.allFrequencyMatrixFor(locus: "LTRS")
-        
         XCTAssertEqual( data.count, fMat.rows)
         XCTAssertEqual( fMat.colNames, ["1","2"])
     }
@@ -158,8 +185,6 @@ class DataStoreTests: XCTestCase {
         XCTAssertEqual( data.count, gMat.rows)
         XCTAssertEqual( gMat.colNames, ["1:1","1:2","2:2"])
         print("\(gMat)")
-        
-        
     }
      */
 

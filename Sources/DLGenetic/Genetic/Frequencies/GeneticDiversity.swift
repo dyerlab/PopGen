@@ -31,6 +31,7 @@ import Foundation
 import DLMatrix
 import SwiftUI
 
+
 public struct GeneticDiversity: Hashable, Identifiable {
     public var id = UUID()
     public var N: Int = 0
@@ -113,3 +114,33 @@ public extension GeneticDiversity {
     }
     
 }
+
+
+extension GeneticDiversity: Equatable {
+
+    public static func ==(lhs:GeneticDiversity, rhs:GeneticDiversity) -> Bool {
+        return ( lhs.id == rhs.id &&
+                 lhs.N == rhs.N &&
+                 lhs.A == rhs.A &&
+                 lhs.A95 == rhs.A95 &&
+                 lhs.Ae == rhs.Ae &&
+                 lhs.Ho == rhs.Ho &&
+                 lhs.He == rhs.He &&
+                 lhs.F == rhs.F &&
+                 lhs.label == rhs.label )
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -49,7 +49,7 @@ public struct CSVReader {
                 }
                 
                 // Add the individual
-                ret.addIndiviudal(ind: ind)
+                ret.addIndividual(ind: ind)
                 
             }
         }

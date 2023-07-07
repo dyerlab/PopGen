@@ -31,6 +31,8 @@
 import Foundation
 import DLMatrix
 
+
+
 public struct Frequencies: Codable {
     public var genotypes = [String:Double]()
     private var counts = [String: Double]()
@@ -185,4 +187,19 @@ extension Frequencies: MatrixConvertible {
     }
     
 }
+
+
+
+extension Frequencies: Equatable {
+    public static func ==(lhs: Frequencies, rhs:Frequencies ) -> Bool {
+        return ( lhs.genotypes == rhs.genotypes &&
+                 lhs.counts == rhs.counts  &&
+                 lhs.N == rhs.N &&
+                 lhs.numHets == rhs.numHets &&
+                 lhs.numDiploid == rhs.numDiploid &&
+                 lhs.label == rhs.label )
+    }
+}
+
+
 
