@@ -38,7 +38,7 @@ public extension Matrix {
         let numLabels = divs.count
         let theLabels = divs.compactMap { $0.label }.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending })
         let X = Matrix( numLabels, 4, theLabels, ["N","A","A95","Ae"])
-        
+        X.digits = [0,0,0,4]
         for i in 0 ..< numLabels {
             let div = divs[i]
             X[i,0] = Double(div.N)
@@ -54,7 +54,7 @@ public extension Matrix {
         let numLabels = divs.count
         let theLabels = divs.compactMap { $0.label }.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending })
         let X = Matrix( numLabels, 4, theLabels, ["N","Ho","He","F"])
-        
+        X.digits = [0,4,4,4]
         for i in 0 ..< numLabels {
             let div = divs[i]
             X[i,0] = Double(div.N)
