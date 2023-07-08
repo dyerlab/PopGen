@@ -42,6 +42,7 @@ public struct GeneticDiversity: Hashable, Identifiable {
     public var He: Double = 0.0
     public var F: Double = 0.0
     public var label: String = ""
+    public var locus: String = ""
 
     public init() {}
 

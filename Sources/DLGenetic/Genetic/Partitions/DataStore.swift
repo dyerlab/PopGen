@@ -146,6 +146,21 @@ public extension DataStore {
         return ret
     }
     
+    func diversityForAllLevelsAt( strata: String ) -> [GeneticDiversity] {
+        var ret =  [GeneticDiversity]()
+        let pops = partition(strata: strata)
+        for pop in pops.keys {
+            for locus in self.locusKeys {
+                var div = pops[pop, default: DataStore()].geneticDiversityFor(locus: locus)
+                div.label = pop
+                div.locus = locus
+                ret.append( div )
+            }
+        }
+        return ret
+    }
+    
+    
 }
 
 
