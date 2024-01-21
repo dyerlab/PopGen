@@ -36,7 +36,7 @@ class DataStoreTests: XCTestCase {
 
     
     func testInit() throws {
-        let ds = DataStore()
+        let ds = DataSet()
         
         XCTAssertTrue( ds.isEmpty )
         
@@ -63,20 +63,20 @@ class DataStoreTests: XCTestCase {
     }
     
     func testIndividualsAtLevel() throws {
-        let ds = DataStore.Default()
+        let ds = DataSet.Default()
         let inds = ds.individualsAtLevel(stratum: "Region", level: "SON")
         XCTAssertEqual( inds.count, 38)
     }
     
     
     func testDataStoreForLevel() throws {
-        let ds = DataStore.Default()
+        let ds = DataSet.Default()
         let son = ds.dataStoreForLevel(stratum: "Region", level: "SON")
         print(son)
         XCTAssertEqual( son.count, 38)
         let inds = ds.individualsAtLevel(stratum: "Region", level: "SON")
         XCTAssertEqual( inds.count, 38)
-        let son1 = DataStore(individuals: inds )
+        let son1 = DataSet(individuals: inds )
         XCTAssertEqual( son1.count, 38)
         
     }
@@ -84,14 +84,14 @@ class DataStoreTests: XCTestCase {
     
     
     func testPartitions() throws {
-        let ds = DataStore.Default()
+        let ds = DataSet.Default()
         let partitions = ds.partition(strata: "Region")
         XCTAssertEqual( partitions.count, 4 )
     }
     
     
     func testGenotypeGrabAndFrequencies() throws {
-        let ds = DataStore.Default()
+        let ds = DataSet.Default()
         let genos = ds.genotypesFor(locus: "LTRS" )
         let freq = Frequencies(label: "LTRS", genotypes: genos)
         let dsFreqs = ds.frequencies.first(where: {$0.label == "LTRS"} ) ?? Frequencies()
@@ -100,7 +100,7 @@ class DataStoreTests: XCTestCase {
     }
     
     func testGenotypeDiversityStuff() throws {
-        let ds = DataStore.Default()
+        let ds = DataSet.Default()
         let divs = ds.diversityForAllLoci()
         XCTAssertEqual( divs.count, 8)
         
@@ -108,14 +108,14 @@ class DataStoreTests: XCTestCase {
     
     
     func testFrequenciesForStrataAtLocus() throws {
-        let ds = DataStore.Default()
+        let ds = DataSet.Default()
         let ltrs = ds.frequencyForStrataLevels(locus: "LTRS", strata: "Region")
         XCTAssertEqual( ltrs.count, 4 )
         for ltr in ltrs { print(ltr) }
     }
     
     func testDiversityForStrataAtLocus() throws {
-        let ds = DataStore.Default()
+        let ds = DataSet.Default()
         let ltrs = ds.diversityForStratLevels(locus: "LTRS", strata: "Region")
         XCTAssertEqual( ltrs.count, 4 )
         for ltr in ltrs { print(ltr) }

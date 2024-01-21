@@ -36,25 +36,34 @@ struct LocusView: View {
     var body: some View {
         if reduced && genotype.masking == .MotherLeft {
             Text(String(":\(genotype.right)"))
+                .padding()
         } else if reduced && genotype.masking == .MotherRight {
             Text(String("\(genotype.left):"))
+                .padding()
         } else if reduced && genotype.masking == .Undefined {
             Text(String("\(genotype.left):\(genotype.right)"))
                 .foregroundColor(.red)
+                .padding()
         } else {
             Text(String("\(genotype.left):\(genotype.right)"))
+                .padding()
         }
+        
     }
 }
 
 struct GenotypeView_Previews: PreviewProvider {
     static var previews: some View {
-        LocusView(genotype: .constant(Locus.DefaultNULL()), reduced: false)
-        LocusView(genotype: .constant(Locus.DefaultHaploid()), reduced: false)
-        LocusView(genotype: .constant(Locus.DefaultHomozygote()), reduced: false)
-        LocusView(genotype: .constant(Locus.DefaultHeterozygote()), reduced: true)
-        LocusView(genotype: .constant(Locus.DefaultHeterozygoteMomLeft()), reduced: true)
-        LocusView(genotype: .constant(Locus.DefaultHeterozygoteMomRight()), reduced: true)
-        LocusView(genotype: .constant(Locus.DefaultHeterozygoteUndefined()), reduced: true)
+        
+        VStack {
+            LocusView(genotype: .constant(Locus.DefaultNULL()), reduced: false)
+            LocusView(genotype: .constant(Locus.DefaultHaploid()), reduced: false)
+            LocusView(genotype: .constant(Locus.DefaultHomozygote()), reduced: false)
+            LocusView(genotype: .constant(Locus.DefaultHeterozygote()), reduced: true)
+            LocusView(genotype: .constant(Locus.DefaultHeterozygoteMomLeft()), reduced: true)
+            LocusView(genotype: .constant(Locus.DefaultHeterozygoteMomRight()), reduced: true)
+            LocusView(genotype: .constant(Locus.DefaultHeterozygoteUndefined()), reduced: true)
+        }
+        
     }
 }

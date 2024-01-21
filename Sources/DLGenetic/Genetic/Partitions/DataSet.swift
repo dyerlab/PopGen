@@ -30,14 +30,23 @@
 import Foundation
 import DLMatrix
 
-public class DataStore: Codable, Identifiable  {
+public class DataSet: Codable, Identifiable  {
+    
+    /// List of all individuals in the data set
     public var individuals = [Individual]()
+    
+    /// Pre-allocated locus frequency distributions for all individuals.
+    ///
+    /// These are automatically populated by adding each individual to the
+    ///   dataset.
     public var frequencies = [Frequencies]()
     
+    /// The number of individuals in the data set
     public var count: Int {
         return individuals.count
     }
     
+    /// Quick hack to see if it has entities.
     public var isEmpty: Bool {
         return individuals.count == 0
     }
@@ -102,7 +111,7 @@ public class DataStore: Codable, Identifiable  {
 
 
 
-public extension DataStore {
+public extension DataSet {
     
     func genotypesFor( locus: String ) -> [Locus] {
         return individuals.getGenotypes(named: locus)
@@ -128,7 +137,7 @@ public extension DataStore {
         var ret = [Frequencies]()
         let pops = partition(strata: strata)
         for pop in pops.keys {
-            var freq = pops[pop, default: DataStore()].alleleFrequenciesFor(locus: locus)
+            var freq = pops[pop, default: DataSet()].alleleFrequenciesFor(locus: locus)
             freq.label = pop
             ret.append( freq )
         }
@@ -139,7 +148,7 @@ public extension DataStore {
         var ret =  [GeneticDiversity]()
         let pops = partition(strata: strata)
         for pop in pops.keys {
-            var div = pops[pop, default: DataStore()].geneticDiversityFor(locus: locus)
+            var div = pops[pop, default: DataSet()].geneticDiversityFor(locus: locus)
             div.label = pop
             ret.append( div )
         }
@@ -151,7 +160,7 @@ public extension DataStore {
         let pops = partition(strata: strata)
         for pop in pops.keys {
             for locus in self.locusKeys {
-                var div = pops[pop, default: DataStore()].geneticDiversityFor(locus: locus)
+                var div = pops[pop, default: DataSet()].geneticDiversityFor(locus: locus)
                 div.label = pop
                 div.locus = locus
                 ret.append( div )
@@ -165,15 +174,15 @@ public extension DataStore {
 
 
 
-public extension DataStore {
+public extension DataSet {
     
     func individualsAtLevel( stratum: String, level: String ) -> [Individual] {
         return individuals.individualsForStratumLevel(stratumName: stratum, stratumLevel: level)
     }
     
-    func dataStoreForLevel( stratum: String, level: String ) -> DataStore {
+    func dataStoreForLevel( stratum: String, level: String ) -> DataSet {
         let inds = individualsAtLevel(stratum: stratum, level: level)
-        return DataStore(individuals: inds )
+        return DataSet(individuals: inds )
     }
     
     func sampleSizesForLevel( stratum: String ) -> [String:Int] {
@@ -183,8 +192,8 @@ public extension DataStore {
         return  ret
     }
     
-    func partition( strata: String) -> [String:DataStore] {
-        var ret = [String:DataStore]()
+    func partition( strata: String) -> [String:DataSet] {
+        var ret = [String:DataSet]()
         let levels = individuals.strataLevels(within: strata)
         for level in levels {
             ret[level] = dataStoreForLevel(stratum: strata, level: level)
@@ -207,7 +216,7 @@ public extension DataStore {
 
 
 
-extension DataStore: CustomStringConvertible {
+extension DataSet: CustomStringConvertible {
     public var description: String {
         var ret = "DataStore with:\n"
         ret += " - \(self.individuals.count) individuals\n"
@@ -219,10 +228,10 @@ extension DataStore: CustomStringConvertible {
 
 
 
-extension DataStore {
+extension DataSet {
     
     public static func DefaultBaja() -> [Individual] {
-        let data = DataStore().bajaData()
+        let data = DataSet().bajaData()
         var ret = [Individual]()
         
             for row in data {
@@ -247,8 +256,8 @@ extension DataStore {
         return ret
     }
     
-    public static func Default() -> DataStore {
-        let store = DataStore()
+    public static func Default() -> DataSet {
+        let store = DataSet()
         for ind in DefaultBaja() {
             store.addIndividual(ind: ind )
         }

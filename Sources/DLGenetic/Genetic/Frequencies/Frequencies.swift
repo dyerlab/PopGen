@@ -163,7 +163,7 @@ extension Frequencies: CustomStringConvertible {
 
 public extension Frequencies {
     static func Default() -> Frequencies {
-        let data = DataStore.Default()
+        let data = DataSet.Default()
         let locus = data.individuals.locusKeys.first!
         let genos = data.individuals.getGenotypes(named: locus)
         let freqs = Frequencies(genotypes: genos)

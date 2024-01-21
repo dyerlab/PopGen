@@ -34,7 +34,7 @@ import XCTest
 class FrequencyTests: XCTestCase {
     
     func testInitFixed() throws {
-        let data = DataStore.Default()
+        let data = DataSet.Default()
         XCTAssertEqual(data.frequencies.count, 8)
         
         let freqs = data.alleleFrequenciesFor(locus: "LTRS")

@@ -10,7 +10,7 @@ import XCTest
 final class Array_IndividualTests: XCTestCase {
 
     func testExample() throws {
-        let inds = DataStore.Default().individuals
+        let inds = DataSet.Default().individuals
         
         XCTAssertEqual( inds.locusKeys,
                         ["AML", "ATPS", "EF", "EN", "LTRS", "MP20", "WNT", "ZMP"] )
