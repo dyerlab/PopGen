@@ -91,11 +91,12 @@ public class DataSet: Codable, Identifiable  {
             if let geno = ind.loci[locus] {
                 
                 var idx: Int
-                if let i = frequencies.firstIndex(where: {$0.label == locus} ){
+                if let i = frequencies.firstIndex(where: {$0.locus == locus} ){
                     idx = i
                 } else {
                     idx = frequencies.count
-                    let freq = Frequencies(label: locus)
+                    let freq = Frequencies()
+                    freq.locus = locus 
                     self.frequencies.append( freq )
                 }
 
@@ -118,17 +119,17 @@ public extension DataSet {
     }
     
     func alleleFrequenciesFor( locus: String ) -> Frequencies {
-        return self.frequencies.first(where: {$0.label == locus} ) ?? Frequencies()
+        return self.frequencies.first(where: {$0.locus == locus} ) ?? Frequencies()
     }
     
-    func geneticDiversityFor( locus: String ) -> GeneticDiversity {
-        return GeneticDiversity(frequencies: alleleFrequenciesFor(locus: locus) )
+    func geneticDiversityFor( locus: String ) -> Diversity {
+        return Diversity(frequencies: alleleFrequenciesFor(locus: locus) )
     }
     
-    func diversityForAllLoci() -> [GeneticDiversity] {
-        var ret = [GeneticDiversity]()
+    func diversityForAllLoci() -> [Diversity] {
+        var ret = [Diversity]()
         for freq in frequencies {
-            ret.append( GeneticDiversity(frequencies: freq))
+            ret.append( Diversity(frequencies: freq))
         }
         return ret
     }
@@ -137,15 +138,15 @@ public extension DataSet {
         var ret = [Frequencies]()
         let pops = partition(strata: strata)
         for pop in pops.keys {
-            var freq = pops[pop, default: DataSet()].alleleFrequenciesFor(locus: locus)
-            freq.label = pop
+            let freq = pops[pop, default: DataSet()].alleleFrequenciesFor(locus: locus)
+            freq.locus = pop
             ret.append( freq )
         }
         return ret
     }
     
-    func diversityForStratLevels( locus: String, strata: String ) -> [GeneticDiversity] {
-        var ret =  [GeneticDiversity]()
+    func diversityForStratLevels( locus: String, strata: String ) -> [Diversity] {
+        var ret =  [Diversity]()
         let pops = partition(strata: strata)
         for pop in pops.keys {
             var div = pops[pop, default: DataSet()].geneticDiversityFor(locus: locus)
@@ -155,8 +156,8 @@ public extension DataSet {
         return ret
     }
     
-    func diversityForAllLevelsAt( strata: String ) -> [GeneticDiversity] {
-        var ret =  [GeneticDiversity]()
+    func diversityForAllLevelsAt( strata: String ) -> [Diversity] {
+        var ret =  [Diversity]()
         let pops = partition(strata: strata)
         for pop in pops.keys {
             for locus in self.locusKeys {

@@ -33,7 +33,6 @@ import DLMatrix
 
 
 /// A base object to represent a genetic locus.
-
 public struct Genotype: Codable, Equatable, CustomStringConvertible {
     
     /// Keeping the alleles as a diploid set of strings.

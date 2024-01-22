@@ -13,7 +13,7 @@ public extension Matrix {
     
     static func forFrequencies( freqs: [Frequencies] ) -> Matrix {
         let numLables = freqs.count
-        let theLabels = freqs.compactMap { $0.label }.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending })
+        let theLabels = freqs.compactMap { $0.locus }.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending })
         var allAlleles = [String]()
         for freq in freqs {
             allAlleles.append(contentsOf: freq.alleles )
@@ -24,7 +24,7 @@ public extension Matrix {
         let X = Matrix( numLables, numAlleles, theLabels, alleles )
         for row in 0 ..< numLables {
             let label = theLabels[row]
-            if let freq = freqs.first(where: {$0.label == label} ) {
+            if let freq = freqs.first(where: {$0.locus == label} ) {
                 for col in 0 ..< alleles.count {
                     X[row,col] = freq.forAllele(allele: alleles[col] )
                 }
@@ -34,7 +34,7 @@ public extension Matrix {
     }
     
     
-    static func forAllelicDiversity( divs: [GeneticDiversity] ) -> Matrix {
+    static func forAllelicDiversity( divs: [Diversity] ) -> Matrix {
         let numLabels = divs.count
         let theLabels = divs.compactMap { $0.label }.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending })
         let X = Matrix( numLabels, 4, theLabels, ["N","A","A95","Ae"])
@@ -50,7 +50,7 @@ public extension Matrix {
     }
     
     
-    static func forGenotypicDiversity( divs: [GeneticDiversity] ) -> Matrix {
+    static func forGenotypicDiversity( divs: [Diversity] ) -> Matrix {
         let numLabels = divs.count
         let theLabels = divs.compactMap { $0.label }.sorted(by: { $0.compare($1, options: .numeric) == .orderedAscending })
         let X = Matrix( numLabels, 4, theLabels, ["N","Ho","He","F"])

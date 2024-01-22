@@ -6,35 +6,39 @@
 //
 
 import Foundation
+import DLMatrix
+
 
 extension Array where Element == Frequencies {
-    
-    /*
-    public func totalDiversity() -> GeneticDiversity {
-        var ret = GeneticDiversity()
         
-        ret.locus = self.count > 0 ? first!.locus : "undefined"
-
-        ret.N = ret.N + self.compactMap { $0.N }.reduce( 0, +)
-        ret.A = ret.A + self.compactMap { $0.A }.reduce( 0, +)
-        ret.A95 = ret.A95 + self.compactMap { $0.A95 }.reduce( 0, +)
-        ret.Ae = ret.Ae + self.compactMap { $0.Ae }.reduce( 0.0, +)
-        ret.Ho = ret.Ho + self.compactMap { $0.Ho }.reduce( 0.0, +)
-        ret.He = ret.He + self.compactMap { $0.He }.reduce( 0.0, +)
-        ret.F = ret.F + self.compactMap { $0.F }.reduce( 0.0, +)
-        
-        
-        
-        return ret
-    }
-     */
-    
     public func totalFrequencies() -> Frequencies {
         return Frequencies(freqs: self )
     }
     
-    public func totalGeneticDiversity() -> GeneticDiversity {
-        return GeneticDiversity(frequencies: self.totalFrequencies() )
+    public func totalGeneticDiversity() -> Diversity {
+        return Diversity(frequencies: self.totalFrequencies() )
     }
     
+    public var allAlleles: [String] {
+        var ret = [String]()
+        for item in self {
+            ret.append( contentsOf: item.alleles )
+        }
+        return ret.unique().sorted()
+    }
+    
+    public func toMatrix() -> Matrix {
+        let alleles = self.allAlleles
+        let X = Matrix(count, alleles.count )
+        
+        X.colNames = alleles
+        X.rowNames = self.map{ $0.label }
+        for i in 0 ..< self.count {
+            for j in 0 ..< alleles.count {
+                X[i,j] = self[i].forAllele(allele: alleles[j] )
+            }
+        }
+        
+        return X
+    }
 }

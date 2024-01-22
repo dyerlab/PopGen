@@ -93,8 +93,8 @@ class DataStoreTests: XCTestCase {
     func testGenotypeGrabAndFrequencies() throws {
         let ds = DataSet.Default()
         let genos = ds.genotypesFor(locus: "LTRS" )
-        let freq = Frequencies(label: "LTRS", genotypes: genos)
-        let dsFreqs = ds.frequencies.first(where: {$0.label == "LTRS"} ) ?? Frequencies()
+        let freq = Frequencies(locus: "LTRS", genotypes: genos)
+        let dsFreqs = ds.frequencies.first(where: {$0.locus == "LTRS"} ) ?? Frequencies()
         XCTAssertEqual( freq, dsFreqs )
         XCTAssertEqual( freq, ds.alleleFrequenciesFor(locus: "LTRS"))
     }

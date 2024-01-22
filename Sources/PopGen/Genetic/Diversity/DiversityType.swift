@@ -36,14 +36,14 @@ import Foundation
 enum DiversityType: String {
     
     /// Diversity of alleles at a locus
-    case Allelic
+    case Allelic = "Allelic"
     
     /// Diversity within a genotype
-    case Genotypic
+    case Genotypic = "Genotypic"
     
     /// Diversity based upon frequency spectra
-    case Frequency
+    case Frequency = "Frequency"
     
     /// Diversity related to the spatial location of alleles on a landscape
-    case Spatial
+    case Spatial = "Spatial"
 }

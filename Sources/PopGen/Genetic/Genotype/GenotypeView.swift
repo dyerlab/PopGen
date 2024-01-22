@@ -30,7 +30,7 @@
 import SwiftUI
 
 struct GenotypeView: View {
-    @Binding var genotype: Genotype
+    var genotype: Genotype
     @State var reduced: Bool
 
     var body: some View {
@@ -57,13 +57,13 @@ struct GenotypeView_Previews: PreviewProvider {
     static var previews: some View {
         
         VStack {
-            GenotypeView(genotype: .constant(Genotype.DefaultNULL()), reduced: false)
-            GenotypeView(genotype: .constant(Genotype.DefaultHaploid()), reduced: false)
-            GenotypeView(genotype: .constant(Genotype.DefaultHomozygote()), reduced: false)
-            GenotypeView(genotype: .constant(Genotype.DefaultHeterozygote()), reduced: true)
-            GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteMomLeft()), reduced: true)
-            GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteMomRight()), reduced: true)
-            GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteUndefined()), reduced: true)
+            GenotypeView(genotype: Genotype.DefaultNULL(), reduced: false)
+            GenotypeView(genotype: Genotype.DefaultHaploid(), reduced: false)
+            GenotypeView(genotype: Genotype.DefaultHomozygote(), reduced: false)
+            GenotypeView(genotype: Genotype.DefaultHeterozygote(), reduced: true)
+            GenotypeView(genotype: Genotype.DefaultHeterozygoteMomLeft(), reduced: true)
+            GenotypeView(genotype: Genotype.DefaultHeterozygoteMomRight(), reduced: true)
+            GenotypeView(genotype: Genotype.DefaultHeterozygoteUndefined(), reduced: true)
             
         }
         .padding()

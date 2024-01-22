@@ -32,15 +32,35 @@ import Foundation
 import DLMatrix
 
 
-
-public struct Frequencies: Codable {
-    public var genotypes = [String:Double]()
-    private var counts = [String: Double]()
-    private var N = 0.0
-    public var numHets = 0.0
-    public var numDiploid = 0.0
-    public var label: String
+/// Allele frequencies object
+///
+/// This is the main operator for any estimations based upon allele frequencies.
+public class Frequencies: Identifiable, Codable {
+    /// Identification for object
+    public let id: UUID
     
+    /// Dictionary for observed genotypes (string representation) and their counts.
+    public var genotypes = [String:Double]()
+    
+    /// Internal counts of all alleles recorded
+    private var counts = [String: Double]()
+    
+    /// The number of actual genotypes evaluated.
+    private var N = 0.0
+    
+    /// The number of observed heterozygotes
+    public var numHets = 0.0
+    
+    /// The number of entered genotypes that were actually diploid
+    public var numDiploid = 0.0
+    
+    /// The locus from which the frequencies are being estimated
+    public var locus: String = ""
+    
+    /// An optional designation for subdivisions to maintain labels
+    public var label: String = ""
+    
+    /// The array of alleles at this locus
     public var alleles: [String] {
         get {
             return counts.keys.sorted { $0.localizedStandardCompare($1) == .orderedAscending }
@@ -52,20 +72,40 @@ public struct Frequencies: Codable {
         }
     }
     
-    public var asDiversity: GeneticDiversity {
-        return GeneticDiversity(frequencies: self)
+    /// Return as PieChartDAta
+    public var asKeyValueData: [KeyValueData] {
+        var ret = [KeyValueData]()
+        for allele in self.alleles {
+            let data = KeyValueData( label: allele,
+                                     value: self.forAllele(allele:  allele ))
+            ret.append( data )
+        }
+        return ret
+        
     }
     
+    
+    /// Convert to `GeneticDiversity` object
+    public var asDiversity: Diversity {
+        return Diversity(frequencies: self)
+    }
+    
+    /// Property to indicate no genotypes in this object
     public var isEmpty: Bool {
-        return self.N == 0 
+        return self.N == 0
     }
 
-    public init( label: String = "Default Frequencies" ) {
-        self.label = label
+    
+    /// Default initializer with option for adding label.
+    public init() {
+        self.id = UUID()
+        self.locus = ""
     }
     
-    public init( label: String = "Default Frequencies", freqs: [Frequencies] ) {
-        self.label = label
+    /// Initializer with array of frequencies to coagulate allele frequencies amongst subgroups.
+    public init(freqs: [Frequencies]  ) {
+        self.id = UUID()
+        self.locus = freqs.first?.locus ?? "No locus given"
         for freq in freqs {
             self.N = self.N + freq.N
             self.numHets = self.numHets + freq.numHets
@@ -78,21 +118,47 @@ public struct Frequencies: Codable {
             }
         }
     }
-
-    public init(label: String = "Default", genotypes: [Genotype] ) {
-        self.label = label
+    
+    
+    /// Initialize frequency object with array of genotypes
+    public init(locus: String, genotypes: [Genotype] ) {
+        self.id = UUID()
+        self.locus = locus
         for geno in genotypes {
             addGenotype(geno: geno)
         }
     }
 
-    public mutating func addGenotypes(genos: [Genotype]) {
+    
+    /// Initialize frequency object with array of genotypes
+    public init(label: String, locus: String, genotypes: [Genotype] ) {
+        self.id = UUID()
+        self.locus = locus
+        self.label = label 
+        for geno in genotypes {
+            addGenotype(geno: geno)
+        }
+    }
+
+    
+    
+    
+    /// Method to add genotype representation to Frequencies
+    ///
+    /// - Parameters:
+    ///     - genos: Array of `Genotype` objects to add to the structure.
+    public func addGenotypes(genos: [Genotype]) {
         genos.forEach { geno in
             self.addGenotype(geno: geno)
         }
     }
-
-    public mutating func addGenotype(geno: Genotype) {
+    
+    /// Add individual genotype to struct
+    ///
+    /// Genotypes should **only** be added to this using this method as this is where all the internal parameters are set.
+    /// - Parameters:
+    ///     - geno: An object of type `Genotype`
+    public func addGenotype(geno: Genotype) {
         
         if !geno.isEmpty && geno.ploidy == .Diploid {
             self.genotypes[ geno.description ] = self.genotypes[ geno.description, default: 0.0] + 1
@@ -124,7 +190,12 @@ public struct Frequencies: Codable {
             }
         }
     }
-
+    
+    /// Returns allele frequency for allele
+    ///
+    /// - Parameters:
+    ///     - allele: The allele inquestion
+    /// - Returns: The alllele frequency of the allele (or zero if it is not present)
     public func forAllele(allele: String) -> Double {
         if N == 0.0 {
             return 0.0
@@ -132,7 +203,14 @@ public struct Frequencies: Codable {
             return counts[allele, default: 0.0] / N
         }
     }
-
+    
+    /// Allele frequencies as vector
+    ///
+    /// This returns all the alleles, in the same order as asked, as frequencies.
+    ///
+    /// - Parameters:
+    ///     - alleles: An array of alleles being asked for.
+    /// - Returns: A vector of allele frequencies from `forAllele()`
     public func forAlleles(alleles: [String]) -> Vector {
         var ret = Vector(repeating: 0.0, count: alleles.count)
         for i in 0 ..< alleles.count {
@@ -143,8 +221,10 @@ public struct Frequencies: Codable {
 }
 
 extension Frequencies: CustomStringConvertible {
+    
+    /// Override of description for textual represntation
     public var description: String {
-        var ret = "Frequencies: \(self.label)\n"
+        var ret = "Frequencies: \(self.locus)\n"
         for allele in alleles {
             ret += String(" \(allele): \(forAllele(allele: allele))\n")
         }
@@ -162,11 +242,26 @@ extension Frequencies: CustomStringConvertible {
 }
 
 public extension Frequencies {
+    
+    /// Static default version of this object
     static func Default() -> Frequencies {
         let data = DataSet.Default()
-        let locus = data.individuals.locusKeys.first!
+        let locus = data.individuals.locusKeys.shuffled().first!
         let genos = data.individuals.getGenotypes(named: locus)
-        let freqs = Frequencies(genotypes: genos)
+        let freqs = Frequencies(locus: locus, genotypes: genos)
+        return freqs
+    }
+    
+    
+    /// Static default for list of all allele frequenices
+    static func DefaultList() -> [Frequencies] {
+        var freqs = [Frequencies]()
+        let data = DataSet.Default()
+        for locus in data.locusKeys {
+            let genos = data.individuals.getGenotypes(named: locus)
+            let freq = Frequencies(locus: locus, genotypes: genos)
+            freqs.append( freq )
+        }
         return freqs
     }
 }
@@ -174,6 +269,7 @@ public extension Frequencies {
 
 extension Frequencies: MatrixConvertible {
     
+    /// Conforming to return this object as an Matrix object.
     public func asMatrix() -> Matrix {
         let theAlleles = self.alleles
         let ret = Matrix( 1, theAlleles.count )
@@ -186,18 +282,23 @@ extension Frequencies: MatrixConvertible {
         return ret
     }
     
+    
+    
+    
 }
 
 
 
 extension Frequencies: Equatable {
+    
+    /// Override of equatable operator to determine numerical identity of two `Frequencies` objects
     public static func ==(lhs: Frequencies, rhs:Frequencies ) -> Bool {
         return ( lhs.genotypes == rhs.genotypes &&
                  lhs.counts == rhs.counts  &&
                  lhs.N == rhs.N &&
                  lhs.numHets == rhs.numHets &&
                  lhs.numDiploid == rhs.numDiploid &&
-                 lhs.label == rhs.label )
+                 lhs.locus == rhs.locus )
     }
 }
 
