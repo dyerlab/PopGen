@@ -79,20 +79,20 @@ public struct Frequencies: Codable {
         }
     }
 
-    public init(label: String = "Default", genotypes: [Locus] ) {
+    public init(label: String = "Default", genotypes: [Genotype] ) {
         self.label = label
         for geno in genotypes {
             addGenotype(geno: geno)
         }
     }
 
-    public mutating func addGenotypes(genos: [Locus]) {
+    public mutating func addGenotypes(genos: [Genotype]) {
         genos.forEach { geno in
             self.addGenotype(geno: geno)
         }
     }
 
-    public mutating func addGenotype(geno: Locus) {
+    public mutating func addGenotype(geno: Genotype) {
         
         if !geno.isEmpty && geno.ploidy == .Diploid {
             self.genotypes[ geno.description ] = self.genotypes[ geno.description, default: 0.0] + 1

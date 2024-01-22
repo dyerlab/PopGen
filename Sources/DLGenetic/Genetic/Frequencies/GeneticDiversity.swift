@@ -46,7 +46,7 @@ public struct GeneticDiversity: Hashable, Identifiable {
 
     public init() {}
 
-    public init( label: String, genos: [Locus]) {
+    public init( label: String, genos: [Genotype]) {
         self.setParameters( label: label, frequencies: Frequencies(genotypes: genos) )
     }
     

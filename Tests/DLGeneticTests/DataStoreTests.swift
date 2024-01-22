@@ -40,11 +40,11 @@ class DataStoreTests: XCTestCase {
         
         XCTAssertTrue( ds.isEmpty )
         
-        let genos = [ Locus(raw: "A:A"),
-                      Locus(raw: "A:A"),
-                      Locus(raw: "A:A"),
-                      Locus(raw: "A:B"),
-                      Locus(raw: "B:B")
+        let genos = [ Genotype(raw: "A:A"),
+                      Genotype(raw: "A:A"),
+                      Genotype(raw: "A:A"),
+                      Genotype(raw: "A:B"),
+                      Genotype(raw: "B:B")
                     ]
         
         for geno in genos {

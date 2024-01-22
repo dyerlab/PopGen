@@ -38,7 +38,7 @@ public struct WierCockerham {
     }
     
     
-    init(genotypes: [Locus], partitions: [String]) {
+    init(genotypes: [Genotype], partitions: [String]) {
         let N = genotypes.count
         strata = partitions
         dfT = Double(N) - 1.0

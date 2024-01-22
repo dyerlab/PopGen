@@ -82,8 +82,8 @@ public extension Array where Element == Individual {
     /**
      Get all the genotypes for a single locus
      */
-    func getGenotypes(named: String) -> [Locus] {
-        return compactMap { $0.loci[named, default: Locus()] }
+    func getGenotypes(named: String) -> [Genotype] {
+        return compactMap { $0.loci[named, default: Genotype()] }
     }
     
     /**
@@ -134,8 +134,8 @@ public extension Array where Element == Individual {
     }
     
     
-    func locusForStrataLevels( locus: String, stratumName: String) -> [String: [Locus] ] {
-        var ret = [String: [Locus] ]()
+    func locusForStrataLevels( locus: String, stratumName: String) -> [String: [Genotype] ] {
+        var ret = [String: [Genotype] ]()
         let strata = self.strataLevels(within: stratumName )
         for stratum in strata {
             let inds = individualsForStratumLevel(stratumName: stratumName, stratumLevel: stratum)
@@ -149,7 +149,7 @@ public extension Array where Element == Individual {
         var ret = [String: Frequencies ]()
         let lociForStratum = locusForStrataLevels(locus: locus, stratumName: stratumName )
         for stratumName in lociForStratum.keys  {
-            ret[ stratumName ] = Frequencies(genotypes: lociForStratum[ stratumName, default: [Locus]() ] )
+            ret[ stratumName ] = Frequencies(genotypes: lociForStratum[ stratumName, default: [Genotype]() ] )
         }
         return ret
     }

@@ -34,12 +34,12 @@ import DLMatrix
 
 class AMOVADistanceTests: XCTestCase {
     func testExample() throws {
-        let loci = [Locus(raw: "A:A"),
-                    Locus(raw: "A:B"),
-                    Locus(raw: "A:C"),
-                    Locus(raw: "B:B"),
-                    Locus(raw: "B:C"),
-                    Locus(raw: "C:C")]
+        let loci = [Genotype(raw: "A:A"),
+                    Genotype(raw: "A:B"),
+                    Genotype(raw: "A:C"),
+                    Genotype(raw: "B:B"),
+                    Genotype(raw: "B:C"),
+                    Genotype(raw: "C:C")]
 
         let M = Matrix(6, 6)
         for i in 0 ..< 6 {
@@ -60,6 +60,6 @@ class AMOVADistanceTests: XCTestCase {
         X.colNames = M.colNames
         
         XCTAssertEqual( M, X )
-        XCTAssertEqual(amovaDistance(geno1: Locus(raw: "A:B"), geno2: Locus(raw: "C:D")), 2.0)
+        XCTAssertEqual(amovaDistance(geno1: Genotype(raw: "A:B"), geno2: Genotype(raw: "C:D")), 2.0)
     }
 }

@@ -36,7 +36,7 @@ import DLMatrix
 ///   - geno1: The first genotype
 ///   - geno2: The second genotype
 /// - Returns: The distance between the two genotypes
-public func amovaDistance(geno1: Locus, geno2: Locus) -> Double {
+public func amovaDistance(geno1: Genotype, geno2: Genotype) -> Double {
     if geno1.isEmpty || geno2.isEmpty || geno1 == geno2 {
         return 0.0
     }

@@ -113,7 +113,7 @@ public class DataSet: Codable, Identifiable  {
 
 public extension DataSet {
     
-    func genotypesFor( locus: String ) -> [Locus] {
+    func genotypesFor( locus: String ) -> [Genotype] {
         return individuals.getGenotypes(named: locus)
     }
     
@@ -243,14 +243,14 @@ extension DataSet {
                     ind.latitude = lat + Double.random(in: 0...100) / 10000.0
                     ind.longitude = lon + Double.random(in: 0...100) / 10000.0
                 }
-                ind.loci["LTRS"] = Locus(raw: row[4])
-                ind.loci["WNT"] = Locus(raw: row[5])
-                ind.loci["EN"] = Locus(raw: row[6])
-                ind.loci["EF"] = Locus(raw: row[7])
-                ind.loci["ZMP"] = Locus(raw: row[8])
-                ind.loci["AML"] = Locus(raw: row[9])
-                ind.loci["ATPS"] = Locus(raw: row[10])
-                ind.loci["MP20"] = Locus(raw: row[11])
+                ind.loci["LTRS"] = Genotype(raw: row[4])
+                ind.loci["WNT"] = Genotype(raw: row[5])
+                ind.loci["EN"] = Genotype(raw: row[6])
+                ind.loci["EF"] = Genotype(raw: row[7])
+                ind.loci["ZMP"] = Genotype(raw: row[8])
+                ind.loci["AML"] = Genotype(raw: row[9])
+                ind.loci["ATPS"] = Genotype(raw: row[10])
+                ind.loci["MP20"] = Genotype(raw: row[11])
                 ret.append( ind )
             }
         return ret
