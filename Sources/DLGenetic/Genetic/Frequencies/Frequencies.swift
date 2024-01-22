@@ -114,11 +114,11 @@ public struct Frequencies: Codable {
             return
         } else if geno.masking != .NoMasking {
             // either not diploid or masked
-            if geno.masking != .MotherLeft && !geno.left.isEmpty {
+            if geno.masking != .ParentLeft && !geno.left.isEmpty {
                 N += 1.0
                 counts[geno.left, default: 0.0] += 1.0
             }
-            if geno.masking != .MotherRight && !geno.right.isEmpty {
+            if geno.masking != .ParentRight && !geno.right.isEmpty {
                 N += 1.0
                 counts[geno.right, default: 0.0] += 1.0
             }

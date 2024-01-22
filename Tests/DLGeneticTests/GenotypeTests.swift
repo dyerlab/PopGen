@@ -124,7 +124,7 @@ class GenotypeTests: XCTestCase {
         XCTAssertEqual(geno, Locus(raw: "A:B"))
         XCTAssertEqual(geno.asVector(alleles: ["A", "B", "C"]), [1.0, 1.0, 0.0])
         XCTAssertEqual( geno.left, geno.maskedLeft )
-        XCTAssertEqual( geno.masking, .MotherRight)
+        XCTAssertEqual( geno.masking, .ParentRight)
         XCTAssertEqual( geno.right, "B" )
         XCTAssertEqual( geno.maskedLeft, "A")
         XCTAssertEqual( geno.maskedRight, "")
@@ -139,7 +139,7 @@ class GenotypeTests: XCTestCase {
         XCTAssertEqual(geno, Locus(raw: "A:B"))
         XCTAssertEqual(geno.asVector(alleles: ["A", "B", "C"]), [1.0, 1.0, 0.0])
         XCTAssertEqual( geno.left, "A" )
-        XCTAssertEqual( geno.masking, .MotherLeft)
+        XCTAssertEqual( geno.masking, .ParentLeft)
         XCTAssertEqual( geno.maskedLeft, "")
         XCTAssertEqual( geno.maskedRight, "B")
     }
@@ -197,11 +197,11 @@ class GenotypeTests: XCTestCase {
         
         let genoMomLeft = Locus.DefaultHeterozygoteMomLeft()
         XCTAssertEqual( genoMomLeft, Locus.DefaultHeterozygote())
-        XCTAssertEqual( genoMomLeft.masking, .MotherLeft)
+        XCTAssertEqual( genoMomLeft.masking, .ParentLeft)
         
         let genoMomRight = Locus.DefaultHeterozygoteMomRight()
         XCTAssertEqual( genoMomRight, Locus.DefaultHeterozygote())
-        XCTAssertEqual( genoMomRight.masking, .MotherRight)
+        XCTAssertEqual( genoMomRight.masking, .ParentRight)
         
         let genoMomUndef = Locus.DefaultHeterozygoteUndefined()
         XCTAssertEqual( genoMomUndef, Locus.DefaultHeterozygote())

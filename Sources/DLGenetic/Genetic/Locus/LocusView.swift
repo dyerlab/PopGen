@@ -34,10 +34,10 @@ struct LocusView: View {
     @State var reduced: Bool
 
     var body: some View {
-        if reduced && genotype.masking == .MotherLeft {
+        if reduced && genotype.masking == .ParentLeft {
             Text(String(":\(genotype.right)"))
                 .padding()
-        } else if reduced && genotype.masking == .MotherRight {
+        } else if reduced && genotype.masking == .ParentRight {
             Text(String("\(genotype.left):"))
                 .padding()
         } else if reduced && genotype.masking == .Undefined {

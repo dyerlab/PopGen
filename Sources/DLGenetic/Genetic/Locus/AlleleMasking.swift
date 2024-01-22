@@ -29,19 +29,28 @@
 
 import Foundation
 
-/// An enum to idicate the masking level for genotypes in family arrays.
+/// An enum to idicate the masking level for genotypes in family arrays
+///   or other parent/offspring kinds of relationships.
+///
+/// Allele masking is the way that parent/offspring relationships are
+///   displayed and manipulated with.  For example, if you would like
+///   to estimate pollen pool allele frequencies, you need to remover the
+///   maternal contribution and then pass the set of loci to Frequencies
+///   objects.  The locus is not internally modified, **but** with masking
+///   the receiving Frequency object knows which allele to consider in
+///   isolation.
 public enum AlleleMasking: String, Codable {
     /// No masking
     case NoMasking = "No Masking"
 
     /// Mother has left allele
-    case MotherLeft = "Mom Allele Left"
+    case ParentLeft = "Parent Allele Left"
 
     /// Mother is right allele
-    case MotherRight = "Mom Allele Right"
+    case ParentRight = "Parent Allele Right"
 
     /// Cannot determine masking due to shared heterozygote
-    case Undefined = "Mom/Offpsring Same Heterozygote"
+    case Undefined = "Parent/Offpsring Same Heterozygote"
 
     /// Missing data
     case MissingData = "Missing Data"

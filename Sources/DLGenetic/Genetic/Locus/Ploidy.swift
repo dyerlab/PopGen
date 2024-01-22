@@ -30,16 +30,25 @@
 
 import Foundation
 
-/*
- An enum to designate ploidy of a locus.
- */
+/// An enum to designate ploidy of a locus.
+///
+/// This is a constant indicator across all instances of a locus, indicating the
+///   default ploidy of the locus in the organism.  It conforms to Int and
+///   has a rawValue equal to the number of alleles.
 public enum Ploidy: Int {
+    
     /// No alleles
     case Missing = 0
 
     /// Only one allele
-    case Haploid
+    case Haploid = 1
 
     /// Both Alleles present
-    case Diploid
+    case Diploid = 2
+    
+    /// Three alleles at the locus
+    case Triploid = 3
+    
+    /// Four alleles
+    case Polyploid = 4
 }

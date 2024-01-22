@@ -31,17 +31,21 @@
 import Foundation
 import DLMatrix
 
+
+/// A base object to represent a genetic locus.
+
 public struct Locus: Codable, Equatable, CustomStringConvertible {
+    
     /// Keeping the alleles as a diploid set of strings.
     public var left: String = ""
     public var right: String = ""
     
     public var maskedLeft: String {
-        return self.masking == .MotherLeft ? "" : self.left
+        return self.masking == .ParentLeft ? "" : self.left
     }
     
     public var maskedRight: String {
-        return self.masking == .MotherRight ? "" : self.right
+        return self.masking == .ParentRight ? "" : self.right
     }
 
     /// By default
@@ -57,7 +61,7 @@ public struct Locus: Codable, Equatable, CustomStringConvertible {
         return ploidy == .Diploid && left != right
     }
 
-    /// Description of the genotype
+    /// Description of the genotype as a string object
     public var description: String {
         switch ploidy {
         case .Missing:
@@ -67,9 +71,9 @@ public struct Locus: Codable, Equatable, CustomStringConvertible {
         default:
             if masking == .NoMasking || masking == .Undefined {
                 return String("\(left):\(right)")
-            } else if masking == .MotherLeft {
+            } else if masking == .ParentLeft {
                 return right
-            } else if masking == .MotherRight {
+            } else if masking == .ParentRight {
                 return left
             } else {
                 return "XXX"
@@ -144,12 +148,12 @@ public struct Locus: Codable, Equatable, CustomStringConvertible {
             if isHeterozygote {
                 masking = .Undefined
             } else {
-                masking = .MotherLeft
+                masking = .ParentLeft
             }
         } else if parent.left == right || parent.right == right {
-            masking = .MotherRight
+            masking = .ParentRight
         } else if parent.left == left || parent.right == left {
-            masking = .MotherLeft
+            masking = .ParentLeft
         } else {
             masking = .Undefined
         }
@@ -197,32 +201,40 @@ public extension Locus {
     }
 }
 
+
+
 extension Locus {
+    
+    /// Static example of empty locus
     public static func DefaultNULL() -> Locus {
         return Locus()
     }
 
+    /// Static example of haploid locus
     public static func DefaultHaploid() -> Locus {
         return Locus(raw: "A")
     }
 
+    /// Static example of heterozygote
     public static func DefaultHeterozygote() -> Locus {
         return Locus(alleles: ("A", "B"))
     }
 
+    /// Static example of homozygote
     public static func DefaultHomozygote() -> Locus {
         return Locus(alleles: ("A", "A"))
     }
 
+    /// Static heterozygote with AlleleMasking.
     public static func DefaultHeterozygoteMomLeft() -> Locus {
         var geno = Locus(raw: "A:B")
-        geno.masking = .MotherLeft
+        geno.masking = .ParentLeft
         return geno
     }
 
     public static func DefaultHeterozygoteMomRight() -> Locus {
         var geno = Locus(raw: "A:B")
-        geno.masking = .MotherRight
+        geno.masking = .ParentRight
         return geno
     }
 
