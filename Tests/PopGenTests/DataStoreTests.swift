@@ -28,7 +28,7 @@
 //  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-@testable import DLGenetic
+@testable import PopGen
 
 import XCTest
 

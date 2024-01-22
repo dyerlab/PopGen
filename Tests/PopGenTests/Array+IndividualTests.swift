@@ -4,7 +4,7 @@
 //
 //  Created by Rodney Dyer on 7/4/23.
 //
-@testable import DLGenetic
+@testable import PopGen
 import XCTest
 
 final class Array_IndividualTests: XCTestCase {

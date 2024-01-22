@@ -9,10 +9,10 @@
 //
 //         Making Population Genetic Software That Doesn't Suck
 //
-//  DataColumnsTests.swift
+//  FrequencyTests.swift
 //
 //
-//  Created by Rodney Dyer on 10/29/22.
+//  Created by Rodney Dyer on 5/12/22.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -27,32 +27,27 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-@testable import DLGenetic
+@testable import PopGen
 
 import XCTest
 
-final class DataColumnsTests: XCTestCase {
-
-    func testInit() throws {
-        guard let path = Bundle.module.path(forResource: "arapat", ofType: "csv") else {
-            print("Could not load path for resource 'arapat.csv'")
-            return
-        }
-        print("Path to CSV: \(path)")
-        XCTAssertFalse( path.isEmpty )
-        let reader = CSVReader(path: path)
+class FrequencyTests: XCTestCase {
+    
+    func testInitFixed() throws {
+        let data = DataSet.Default()
+        XCTAssertEqual(data.frequencies.count, 8)
         
-        XCTAssertEqual( reader.contents.count, 364)
-        XCTAssertEqual( reader.contents[0].count, 14)
-        let dcols = DataColumns(raw: reader.contents )
+        let freqs = data.alleleFrequenciesFor(locus: "LTRS")
+        print("\(freqs)")
+        XCTAssertEqual(freqs.alleles, ["1","2"])
+        XCTAssertEqual(freqs.forAllele(allele: "1"), 381.0/730.0)
+        XCTAssertEqual(freqs.forAllele(allele: "3"), 0.0)
+        XCTAssertEqual(freqs.forAlleles(alleles: ["2", "4"]), [349.0/730.0, 0.0])
+        XCTAssertEqual(freqs.numHets, 87.0)
+        XCTAssertEqual(freqs.numDiploid, 365.0)
         
-        XCTAssertTrue( dcols.isSpatial )
-        XCTAssertTrue( dcols.hasID )
-        XCTAssertEqual( dcols.longitude!, 5)
-        XCTAssertEqual( dcols.latitude!, 4)
-        XCTAssertEqual( dcols.strata, [0,1,2])
-        XCTAssertEqual( dcols.loci, [6,7,8,9,10,11,12,13] )
     }
-
-
+    
+    
 }
+
