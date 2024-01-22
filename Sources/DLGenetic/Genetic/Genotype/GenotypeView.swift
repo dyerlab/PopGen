@@ -29,26 +29,27 @@
 
 import SwiftUI
 
-struct LocusView: View {
+struct GenotypeView: View {
     @Binding var genotype: Genotype
     @State var reduced: Bool
 
     var body: some View {
-        if reduced && genotype.masking == .ParentLeft {
-            Text(String(":\(genotype.right)"))
-                .padding()
-        } else if reduced && genotype.masking == .ParentRight {
-            Text(String("\(genotype.left):"))
-                .padding()
-        } else if reduced && genotype.masking == .Undefined {
-            Text(String("\(genotype.left):\(genotype.right)"))
-                .foregroundColor(.red)
-                .padding()
-        } else {
-            Text(String("\(genotype.left):\(genotype.right)"))
-                .padding()
-        }
-        
+            if reduced && genotype.masking == .ParentLeft {
+                Text(String(":\(genotype.right)"))
+                    .padding()
+            } else if reduced && genotype.masking == .ParentRight {
+                Text(String("\(genotype.left):"))
+                    .padding()
+            } else if reduced && genotype.masking == .Undefined {
+                Text(String("\(genotype.left):\(genotype.right)"))
+                    .foregroundColor(.red)
+                    .padding()
+            } else {
+                Text(String("\(genotype.left):\(genotype.right)"))
+                    .padding()
+            }
+
+
     }
 }
 
@@ -56,14 +57,17 @@ struct GenotypeView_Previews: PreviewProvider {
     static var previews: some View {
         
         VStack {
-            LocusView(genotype: .constant(Genotype.DefaultNULL()), reduced: false)
-            LocusView(genotype: .constant(Genotype.DefaultHaploid()), reduced: false)
-            LocusView(genotype: .constant(Genotype.DefaultHomozygote()), reduced: false)
-            LocusView(genotype: .constant(Genotype.DefaultHeterozygote()), reduced: true)
-            LocusView(genotype: .constant(Genotype.DefaultHeterozygoteMomLeft()), reduced: true)
-            LocusView(genotype: .constant(Genotype.DefaultHeterozygoteMomRight()), reduced: true)
-            LocusView(genotype: .constant(Genotype.DefaultHeterozygoteUndefined()), reduced: true)
+            GenotypeView(genotype: .constant(Genotype.DefaultNULL()), reduced: false)
+            GenotypeView(genotype: .constant(Genotype.DefaultHaploid()), reduced: false)
+            GenotypeView(genotype: .constant(Genotype.DefaultHomozygote()), reduced: false)
+            GenotypeView(genotype: .constant(Genotype.DefaultHeterozygote()), reduced: true)
+            GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteMomLeft()), reduced: true)
+            GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteMomRight()), reduced: true)
+            GenotypeView(genotype: .constant(Genotype.DefaultHeterozygoteUndefined()), reduced: true)
+            
         }
+        .padding()
+        
         
     }
 }

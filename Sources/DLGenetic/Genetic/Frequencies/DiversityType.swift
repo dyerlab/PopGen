@@ -29,12 +29,21 @@
 
 import Foundation
 
-/**
- A Categorization of what kind of diversity to be displayed in a GUI.
- */
+
+/// A Categorization of what kind of diversity to be displayed.
+///
+/// These are generatl categories of genetic diversity within which many estimates may be derived.
 enum DiversityType: String {
+    
+    /// Diversity of alleles at a locus
     case Allelic
+    
+    /// Diversity within a genotype
     case Genotypic
+    
+    /// Diversity based upon frequency spectra
     case Frequency
+    
+    /// Diversity related to the spatial location of alleles on a landscape
     case Spatial
 }
