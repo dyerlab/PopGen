@@ -8,36 +8,65 @@
 import Foundation
 import DLMatrix
 
+
+
+/// Single locus Wier & Cockerham Analysis
+///
+/// This is a Matrix Algebra version of this analysis.  This only does a single level in the
+///   analysis.
 public struct WierCockerham {
     
+    /// The AMOVA distance matrix
     public let D: Matrix
+    
+    /// The derived Covariance (R-Mode) matrix
     public var C: Matrix
+    
+    /// The idempotent hypothesis matrix
     public let H: Matrix
+    
+    /// Vectors of individual locals.
     let strata: [String]
+    
+    /// Total degrees of freedom
     let dfT: Double
+    
+    /// Among strata degrees of freedom
     var dfA: Double {
         let K = strata.unique().count
         return Double(K) - 1.0
     }
+    
+    /// Error degrees of freedom.
     var dfW: Double {
         return dfT - dfA
     }
     
+    /// Total Sums of squares
     public let SST: Double
+    
+    /// Within level sums of squared deviations
     public let SSW: Double
+    
+    /// Among locales sums of squared deviations
     public var SSA: Double {
         return SST - SSW
     }
     
+    /// Error mean squares
     public var MSW: Double {
         return SSW / dfW
     }
     
+    /// Treatment mean squares
     public var MSA: Double {
         return SSA / dfA
     }
     
-    
+    /// Main init for this analysis.
+    ///
+    /// This anlayiss takes a vector of genotypes and a vector of partitions and creates the raw materials for
+    ///     the overall analyses.
     init(genotypes: [Genotype], partitions: [String]) {
         let N = genotypes.count
         strata = partitions
@@ -68,6 +97,7 @@ public struct WierCockerham {
 
 extension WierCockerham: CustomStringConvertible {
     
+    /// Override of descritpion to conform to `CustomStringConvertible`
     public var description: String {
         var ret = "W&C\n"
         
