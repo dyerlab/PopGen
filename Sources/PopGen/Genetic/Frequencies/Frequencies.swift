@@ -102,7 +102,12 @@ public class Frequencies: Identifiable, Codable {
         self.locus = ""
     }
     
-    /// Initializer with array of frequencies to coagulate allele frequencies amongst subgroups.
+    /// Initializer with array of frequencies to coagulate allele frequencies from subgroups.
+    ///
+    /// There are times when you need to create a new set of allele frequencies by coalescing a set of subgroups.
+    ///
+    /// - Parameters:
+    ///     - freqs: An array of ``Frequencies`` objects to initiate this with.
     public init(freqs: [Frequencies]  ) {
         self.id = UUID()
         self.locus = freqs.first?.locus ?? "No locus given"
