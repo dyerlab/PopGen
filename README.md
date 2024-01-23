@@ -1,6 +1,16 @@
-# DLGenetic
+# PopGen Swift Package
 
-This Swift Package contains all the primitive components necessary for adding genetic data to a swift project.  The current version is 1.0.6.
+This Swift Package contains all the primitive components used in population and landscape genetic data analysis.  
 
-Looking to reconfigure it from the grounds up.
+Full documentation for the package can be found [here](https://dyerlab.github.io/PopGen/)
 
+
+
+<!--
+swift package --allow-writing-to-directory /Users/rodney/Public/PopGen/docs \
+    generate-documentation --target PopGen \
+    --disable-indexing \
+    --transform-for-static-hosting \
+    --hosting-base-path https://dyerlab.github.io/PopGen/ \
+    --output-path /Users/rodney/Public/PopGen/docs
+--> 
