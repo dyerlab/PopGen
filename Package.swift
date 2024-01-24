@@ -5,8 +5,8 @@ import PackageDescription
 
 let package = Package(
     name: "PopGen",
-    platforms: [ .macOS("14.0"),
-                 .iOS(.v16)],
+    platforms: [ .macOS("14.2"),
+                 .iOS(.v17)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
