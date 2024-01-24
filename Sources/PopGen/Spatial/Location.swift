@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Rodney Dyer on 6/7/22.
 //
@@ -30,4 +30,26 @@ public struct Location: Identifiable {
         self.name = name
         self.coordinate = coordinate
     }
+    
+    
+}
+
+
+extension Location {
+    
+    /// Public constructor of locations from raw storage data.
+    static public func locationsFromPartitionsAndLocations(partition: Partition, coordinates: Coordinates) -> [Location] {
+        var ret = [Location]()
+        if coordinates.count != partition.levels.count { return ret }
+        
+        for i in 0 ..< coordinates.count {
+            let loc = Location(name: partition.levels[i],
+                               coordinate: CLLocationCoordinate2D( latitude: coordinates.latitude[i],
+                                                                   longitude: coordinates.longitude[i] ) )
+            ret.append( loc )
+        }
+        
+        return ret
+    }
+    
 }

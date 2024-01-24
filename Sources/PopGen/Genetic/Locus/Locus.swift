@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-/// Locus storage container for a locus
+/// Locus storage container 
 ///
 /// This is the object that stores a set of genetic data in the
 ///  main repository. 

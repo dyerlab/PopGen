@@ -22,11 +22,22 @@ import SwiftData
     /// Latitude estimate
     public var latitude: [Double]
     
+    /// How many in the entry
+    public var count: Int {
+        return latitude.count
+    }
+    
     /// Initializer
     init() {
         self.id = UUID()
         self.longitude = []
         self.latitude = []
+    }
+    
+    /// adding coordiantews
+    public func append( longitude: Double, latitude: Double) {
+        self.longitude.append( longitude )
+        self.latitude.append( latitude )
     }
     
 }

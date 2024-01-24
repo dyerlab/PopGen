@@ -8,7 +8,7 @@
 //                        |_ _/
 //
 //         Making Population Genetic Software That Doesn't Suck
-// 
+//
 //  DataStore.swift
 //
 //
@@ -65,6 +65,39 @@ public class DataSet: Codable, Identifiable  {
     
     public init() { }
     
+    /// Initializer from storage components.  This will verify:
+    ///  - The number of loci and partitions are the same.
+    ///  - If coordinates are not empty, they must also be the same size.
+    public init(partitions: [Partition], coordinates: [Coordinates], loci: [Locus] ) {
+        let N = partitions.count
+        
+        /// Make some
+        if N > 0 && loci.count > 0 {
+            if partitions.count != loci.count {
+                return
+            }
+            if coordinates.count > 0 && ( coordinates.count != N || coordinates.count != loci.count ) {
+                return
+            }
+        } else {
+            return
+        }
+        
+        for i in 0 ..< N {
+            
+            let ind = Individual()
+            for stratum in partitions {
+                ind.strata[ stratum.name ] = stratum.levels[i]
+            }
+            
+            
+        }
+        
+        
+        
+        
+    }
+    
     public init( individuals: [Individual] ) {
         for ind in individuals {
             addIndividual(ind: ind)
@@ -84,7 +117,7 @@ public class DataSet: Codable, Identifiable  {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode( individuals, forKey: .individuals)
     }
-
+    
     public func addIndividual( ind: Individual ) {
         
         for locus in ind.locusNames {
@@ -96,10 +129,10 @@ public class DataSet: Codable, Identifiable  {
                 } else {
                     idx = frequencies.count
                     let freq = Frequencies()
-                    freq.locus = locus 
+                    freq.locus = locus
                     self.frequencies.append( freq )
                 }
-
+                
                 frequencies[idx].addGenotype(geno: geno)
             }
             else {
@@ -235,25 +268,25 @@ extension DataSet {
         let data = DataSet().bajaData()
         var ret = [Individual]()
         
-            for row in data {
-                let ind = Individual()
-                ind.strata[ "Region" ] = row[0]
-                ind.strata[ "Population" ] = row[1]
-                if let lat = Double(row[2]),
-                   let lon = Double(row[3]) {
-                    ind.latitude = lat + Double.random(in: 0...100) / 10000.0
-                    ind.longitude = lon + Double.random(in: 0...100) / 10000.0
-                }
-                ind.loci["LTRS"] = Genotype(raw: row[4])
-                ind.loci["WNT"] = Genotype(raw: row[5])
-                ind.loci["EN"] = Genotype(raw: row[6])
-                ind.loci["EF"] = Genotype(raw: row[7])
-                ind.loci["ZMP"] = Genotype(raw: row[8])
-                ind.loci["AML"] = Genotype(raw: row[9])
-                ind.loci["ATPS"] = Genotype(raw: row[10])
-                ind.loci["MP20"] = Genotype(raw: row[11])
-                ret.append( ind )
+        for row in data {
+            let ind = Individual()
+            ind.strata[ "Region" ] = row[0]
+            ind.strata[ "Population" ] = row[1]
+            if let lat = Double(row[2]),
+               let lon = Double(row[3]) {
+                ind.latitude = lat + Double.random(in: 0...100) / 10000.0
+                ind.longitude = lon + Double.random(in: 0...100) / 10000.0
             }
+            ind.loci["LTRS"] = Genotype(raw: row[4])
+            ind.loci["WNT"] = Genotype(raw: row[5])
+            ind.loci["EN"] = Genotype(raw: row[6])
+            ind.loci["EF"] = Genotype(raw: row[7])
+            ind.loci["ZMP"] = Genotype(raw: row[8])
+            ind.loci["AML"] = Genotype(raw: row[9])
+            ind.loci["ATPS"] = Genotype(raw: row[10])
+            ind.loci["MP20"] = Genotype(raw: row[11])
+            ret.append( ind )
+        }
         return ret
     }
     
@@ -264,13 +297,13 @@ extension DataSet {
         }
         return store
     }
-
+    
     private func bajaData() -> [[String]] {
         var ret = RawData.mainClade
         ret.append(contentsOf: RawData.sonoranDesert )
         return ret
     }
-
+    
 }
 
 
