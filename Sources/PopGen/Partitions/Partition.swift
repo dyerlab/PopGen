@@ -15,13 +15,13 @@ import SwiftData
 @Model public class Partition {
     
     /// An ID
-    let id: UUID
+    public let id: UUID
     
     /// The name of the stratum
-    var name: String
+    public var name: String
     
     /// The names of the strata
-    var levels: [String]
+    public var levels: [String]
     
     /// Designated initializer
     init(name: String, levels: [String]) {
