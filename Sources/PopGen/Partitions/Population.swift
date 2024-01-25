@@ -11,21 +11,52 @@ import Foundation
 /// The nested storage structure for individuals
 public class Population {
     
-    /// The name of the
+    /// The name of the stratum
     public var name: String = ""
+    
+    /// The nesting level of the stratum
     public var level: String = ""
-    public var individuals: [Individual] = []
+    
+    
+    /// Private individuals
+    private var _individuals: [Individual] = []
+    
+    
+    /// The set of individuals in this level
+    ///
+    /// If this is the basal level, then it is full of the actual individuals. However,
+    ///   if not, it will pull all the indiviudals from subdivisions.
+    public var individuals: [Individual] {
+        
+        get {
+            if subpopulations.isEmpty {
+                return self._individuals
+            } else {
+                var ret = [Individual]()
+                for pop in self.subpopulations {
+                    ret.append( contentsOf: pop.individuals )
+                }
+                return ret
+            }
+        }
+        set {
+            self._individuals = newValue
+        }
+    }
+    
+    /// Frequencies
+    
+
+
+    
+    /// Subpopualtions
     public var subpopulations: [Population] = []
     
     
     
     /// count of individuals
     public var count: Int {
-        if individuals.isEmpty {
-            return subpopulations.compactMap {$0.count}.reduce( 0, + )
-        } else {
-            return individuals.count
-        }
+        return individuals.count
     }
     
     /// Init for subgroups
@@ -34,7 +65,9 @@ public class Population {
         self.name = name
     }
     
-    
+    /// Init with partitions and individuals
+    ///
+    /// This one is the init for the basal level object and it
     init( individuals: [Individual], partitions: [Partition]  ) {
         self.level = "All"
         self.name = "All"
@@ -59,7 +92,7 @@ public class Population {
         
     }
     
-    
+    /// The nested structure creator
     func storeOrPassAlong( individual: Individual, names: [String], levels: [String] ) {
         
         // Store
@@ -91,6 +124,17 @@ public class Population {
             }
         }
         
+    }
+    
+    
+    /// Getting a specific locus
+    public func locusNamed( name: String) -> [Genotype] {
+        return self.individuals.compactMap { $0.loci[name] }
+    }
+    
+    /// Getting frequencies for a specific locus
+    public func frequencyForLocus( named: String ) -> Frequencies {
+        return Frequencies(locus: named, genotypes: self.locusNamed(name: named) )
     }
     
     

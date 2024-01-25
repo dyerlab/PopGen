@@ -36,6 +36,7 @@ import DLMatrix
 ///
 /// This is the main operator for any estimations based upon allele frequencies.
 public class Frequencies: Identifiable, Codable {
+    
     /// Identification for object
     public let id: UUID
     
