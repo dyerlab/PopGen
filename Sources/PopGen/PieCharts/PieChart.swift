@@ -8,11 +8,13 @@
 import SwiftUI
 import Charts
 
+/// Generalized pie chart
 struct PieChart: View {
     var title: String
     var data: [KeyValueData]
         
     var body: some View {
+        ZStack {
         Chart( data) { datum in
             
             SectorMark(angle: .value(
@@ -34,6 +36,9 @@ struct PieChart: View {
             }
         }
         .chartLegend(.hidden)
+            Text("\(title)")
+                .font(.title2)
+        }
     }
 }
 

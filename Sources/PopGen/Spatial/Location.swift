@@ -5,7 +5,7 @@
 //  Created by Rodney Dyer on 6/7/22.
 //
 
-
+import SwiftUI
 import Foundation
 import CoreLocation
 
@@ -20,7 +20,7 @@ public struct Location: Identifiable {
     
     /// Coordinate for the marker.
     public let coordinate: CLLocationCoordinate2D
-    
+        
     /// Default init for the location
     ///
     /// - Parameters:

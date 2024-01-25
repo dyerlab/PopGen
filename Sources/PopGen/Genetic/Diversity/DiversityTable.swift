@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SwiftUIView: View {
+struct DiversityTable: View {
 
     let diversity: Diversity
     
@@ -22,5 +22,5 @@ struct SwiftUIView: View {
 }
 
 #Preview {
-    SwiftUIView( diversity: Diversity.Default() )
+    DiversityTable( diversity: Diversity.Default() )
 }
