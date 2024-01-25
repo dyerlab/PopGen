@@ -32,7 +32,6 @@ public class Population {
     
     /// Init for top-level group
     init(partitions: [Partition], coordinates: Coordinates, loci: [Locus]) {
-        let N = coordinates.count
         self.name = "All Samples"
         self.level = ""
         
@@ -51,6 +50,8 @@ public class Population {
                 partitionLevels.append( partition.level )
                 partitionNames.append( partition.names[i])
             }
+            
+            addIndividual(individual: ind, levels: partitionLevels, names: partitionNames)
         }
         
     }
@@ -87,3 +88,18 @@ public class Population {
     }
     
 }
+
+extension Population: CustomStringConvertible {
+    
+    public var description: String {
+        
+        var ret = String("\(self.level): \(self.name) \(self.count) \n" )
+        for subpopulation in self.subpopulations {
+            ret += String(" \(subpopulation.description)")
+        }
+        return ret
+        
+    }
+}
+
+

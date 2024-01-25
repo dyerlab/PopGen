@@ -65,38 +65,6 @@ public class DataSet: Codable, Identifiable  {
     
     public init() { }
     
-    /// Initializer from storage components.  This will verify:
-    ///  - The number of loci and partitions are the same.
-    ///  - If coordinates are not empty, they must also be the same size.
-    public init(partitions: [Partition], coordinates: [Coordinates], loci: [Locus] ) {
-        let N = partitions.count
-        
-        /// Make some
-        if N > 0 && loci.count > 0 {
-            if partitions.count != loci.count {
-                return
-            }
-            if coordinates.count > 0 && ( coordinates.count != N || coordinates.count != loci.count ) {
-                return
-            }
-        } else {
-            return
-        }
-        
-        for i in 0 ..< N {
-            
-            let ind = Individual()
-            for stratum in partitions {
-                ind.strata[ stratum.name ] = stratum.levels[i]
-            }
-            
-            
-        }
-        
-        
-        
-        
-    }
     
     public init( individuals: [Individual] ) {
         for ind in individuals {
@@ -268,7 +236,7 @@ extension DataSet {
     
     public static func Default() -> DataSet {
         let store = DataSet()
-        for ind in RawData.DefaultBaja {
+        for ind in RawData.DefaultBajaIndividuals {
             store.addIndividual(ind: ind )
         }
         return store

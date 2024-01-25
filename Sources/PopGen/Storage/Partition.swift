@@ -12,7 +12,7 @@ import SwiftData
 /// Partition storage object
 ///
 /// This is the storage object for spatial partitions.
-@Model public class Partition {
+public class Partition: Identifiable {
     
     /// An ID
     public let id: UUID
@@ -28,26 +28,6 @@ import SwiftData
         self.id = UUID()
         self.level = level
         self.names = names
-    }
-    
-}
-
-
-
-extension Partition {
-    
-    static var defaultMainClade: [Partition] {
-        var ret = [Partition]()
-        
-        let raw = RawData.mainClade
-        let levels [ "]
-        for i in 0 ..< 2 {
-            let
-        }
-        
-
-        
-        return ret
     }
     
 }

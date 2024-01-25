@@ -6,12 +6,12 @@
 //
 
 import Foundation
-import SwiftData
+
 
 /// Spatial storage container for spatial data
 ///
 /// This is the storage container for geospatial coordinates.
-@Model public class Coordinates {
+public class Coordinates {
     
     /// UUID Identifier
     public let id: UUID

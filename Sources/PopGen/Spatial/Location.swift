@@ -40,10 +40,10 @@ extension Location {
     /// Public constructor of locations from raw storage data.
     static public func locationsFromPartitionsAndLocations(partition: Partition, coordinates: Coordinates) -> [Location] {
         var ret = [Location]()
-        if coordinates.count != partition.levels.count { return ret }
+        if coordinates.count != partition.names.count { return ret }
         
         for i in 0 ..< coordinates.count {
-            let loc = Location(name: partition.levels[i],
+            let loc = Location(name: partition.names[i],
                                coordinate: CLLocationCoordinate2D( latitude: coordinates.latitude[i],
                                                                    longitude: coordinates.longitude[i] ) )
             ret.append( loc )

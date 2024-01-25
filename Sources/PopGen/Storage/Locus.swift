@@ -6,13 +6,12 @@
 //
 
 import Foundation
-import SwiftData
 
 /// Locus storage container 
 ///
 /// This is the object that stores a set of genetic data in the
 ///  main repository. 
-@Model public class Locus {
+public class Locus {
     
     /// ID for Identifiable
     public let id: UUID

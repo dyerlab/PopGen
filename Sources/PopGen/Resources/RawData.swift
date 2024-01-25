@@ -1333,6 +1333,33 @@ public struct RawData {
         return ret
     }
     
+    public static var DefaultBajaCoordinates: Coordinates {
+        let ret = Coordinates()
+        for row in bajaData {
+            if let lat = Double( row[2] ),
+               let lon = Double( row[3] ) {
+                ret.append( longitude: lon + Double.random(in: 0...100) / 10000.0,
+                            latitude: lat + Double.random(in: 0...100) / 10000.0)
+            }
+        }
+        return ret
+    }
+    
+    public static var DefaultBajaLoci: [Locus] {
+        var ret = [Locus]()
+        let locusNames = ["LTRS","WNT","EN","EF","ZMP","AML","ATPS","MP20"]
+        for col in 0 ..< locusNames.count  {
+            var genotypes = [Genotype]()
+            for row in bajaData {
+                genotypes.append( Genotype(raw: row[col] ) )
+            }
+            let loc = Locus(name: locusNames[col], genotypes: genotypes)
+            ret.append( loc )
+        }
+        return ret
+    }
+    
+    
     public static var DefaultBajaIndividuals: [Individual] {
         var ret = [Individual]()
         
