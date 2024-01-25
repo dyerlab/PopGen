@@ -20,15 +20,13 @@ final class PopulationTests: XCTestCase {
     func testInit() throws {
         
         let partitions = RawData.DefaultBajaPartitions
-        let coordinates = RawData.DefaultBajaCoordinates
-        let loci = RawData.DefaultBajaLoci
+        let individuals = RawData.DefaultUnnestedIndividuals
         
-        let pop = Population(partitions: partitions, coordinates: coordinates, loci: loci)
+        let pop = Population(individuals: individuals, partitions: partitions )
         
-        XCTAssertEqual( pop.count, 361)
+        XCTAssertEqual( pop.count, 365)
         
         print(pop.description)
-        
     }
 
 

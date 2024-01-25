@@ -1328,10 +1328,38 @@ public struct RawData {
             for row in bajaData {
                 names.append( row[col] )
             }
-            ret.append( Partition(level: levels[col], names: names))
+            let partition = Partition(level: levels[col], names: names)
+            print("\(partition)\n")
+            ret.append( partition )
         }
         return ret
     }
+    
+    public static var DefaultUnnestedIndividuals: [Individual] {
+        var ret = [Individual]()        
+        for row in bajaData {
+            let ind = Individual()
+            if let lat = Double(row[2]),
+               let lon = Double(row[3]) {
+                ind.latitude = lat + Double.random(in: 0...100) / 10000.0
+                ind.longitude = lon + Double.random(in: 0...100) / 10000.0
+            }
+            ind.loci["LTRS"] = Genotype(raw: row[4])
+            ind.loci["WNT"] = Genotype(raw: row[5])
+            ind.loci["EN"] = Genotype(raw: row[6])
+            ind.loci["EF"] = Genotype(raw: row[7])
+            ind.loci["ZMP"] = Genotype(raw: row[8])
+            ind.loci["AML"] = Genotype(raw: row[9])
+            ind.loci["ATPS"] = Genotype(raw: row[10])
+            ind.loci["MP20"] = Genotype(raw: row[11])
+            ret.append( ind )
+        }
+        return ret
+        
+    }
+    
+    
+    
     
     public static var DefaultBajaCoordinates: Coordinates {
         let ret = Coordinates()

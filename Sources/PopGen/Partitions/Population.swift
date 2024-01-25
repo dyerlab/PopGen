@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Rodney Dyer on 1/25/24.
 //
@@ -28,34 +28,6 @@ public class Population {
         }
     }
     
-    
-    
-    /// Init for top-level group
-    init(partitions: [Partition], coordinates: Coordinates, loci: [Locus]) {
-        self.name = "All Samples"
-        self.level = ""
-        
-        
-        for i in 0 ..< coordinates.count {
-            let ind = Individual()
-            ind.latitude = coordinates.latitude[i]
-            ind.longitude = coordinates.longitude[i]
-            for loc in loci {
-                ind.loci[ loc.name ] = loc.genotypes[i]
-            }
-            
-            var partitionLevels = [String]()
-            var partitionNames = [String]()
-            for partition in partitions {
-                partitionLevels.append( partition.level )
-                partitionNames.append( partition.names[i])
-            }
-            
-            addIndividual(individual: ind, levels: partitionLevels, names: partitionNames)
-        }
-        
-    }
-    
     /// Init for subgroups
     init(level: String, name: String ) {
         self.level = level
@@ -63,29 +35,64 @@ public class Population {
     }
     
     
-    /// Add individual with names and levels, make subgroups as necessary
-    func addIndividual(individual: Individual, levels: [String] = [], names: [String] = [] ) {
+    init( individuals: [Individual], partitions: [Partition]  ) {
+        self.level = "All"
+        self.name = "All"
         
-        // I am the target because no levels OR matching levels
-        if levels.isEmpty  {
+        
+        let levels = partitions.map { $0.level }
+        
+        
+        // Cycle through all individuals
+        for i in 0 ..< individuals.count {
+            
+            // Find all strata keys
+            let names = partitions.map { $0.names[i] }
+            
+            
+            storeOrPassAlong(individual: individuals[i],
+                             names: names,
+                             levels: levels)
+            
+        }
+        
+        
+    }
+    
+    
+    func storeOrPassAlong( individual: Individual, names: [String], levels: [String] ) {
+        
+        // Store
+        if names.isEmpty || levels.isEmpty {
             self.individuals.append( individual )
         }
-        
-        // Existing Subpopulation is the target
-        else if let subpop = subpopulations.first(where: {$0.name == names[0] }) {
-            subpop.addIndividual(individual: individual )
-        }
-        
-        // Do not have subpop, make it and pass along all the data remaining data
         else {
-            let remainingLevels = levels.count == 1 ? [] : Array<String>( levels.dropFirst() )
-            let remainingNames = names.count == 1 ? [] : Array<String>( names.dropFirst() )
-            let subpop = Population(level: levels[0], name: names[0])
-            subpop.addIndividual(individual: individual, levels: remainingLevels, names: remainingNames)
-            self.subpopulations.append( subpop )
+            
+            // Get subpop
+            let leftoverNames = Array<String>(names.dropFirst())
+            let leftoverLevels = Array<String>(levels.dropFirst())
+            
+            // subpopulation already exists
+            if let subpop = self.subpopulations.first(where: {$0.name == names[0] && $0.level == levels[0] } ) {
+                
+                subpop.storeOrPassAlong( individual: individual,
+                                         names: leftoverNames,
+                                         levels: leftoverLevels )
+                
+            }
+            
+            // no subpopulation by that name here, make new
+            else {
+                let subpop = Population.init(level: levels[0], name: names[0])
+                subpop.storeOrPassAlong( individual: individual,
+                                         names: leftoverNames,
+                                         levels: leftoverLevels )
+                self.subpopulations.append( subpop )
+            }
         }
         
     }
+    
     
 }
 
@@ -93,7 +100,7 @@ extension Population: CustomStringConvertible {
     
     public var description: String {
         
-        var ret = String("\(self.level): \(self.name) \(self.count) \n" )
+        var ret = String("\(self.level): \(self.name) \(self.count) individuals, \(subpopulations.count) subpopulations\n" )
         for subpopulation in self.subpopulations {
             ret += String(" \(subpopulation.description)")
         }

@@ -30,4 +30,15 @@ public class Partition: Identifiable {
         self.names = names
     }
     
+    
+    
+}
+
+
+extension Partition: CustomStringConvertible {
+    
+    public var description: String {
+        return "\(self.level)\n\(self.names.joined(separator: ", "))\n"
+    }
+    
 }
