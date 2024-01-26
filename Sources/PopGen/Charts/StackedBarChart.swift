@@ -16,8 +16,18 @@ struct StackedBarChart: View {
     
     var body: some View {
         VStack {
-            Text(title)
-                .font(.largeTitle)
+            HStack {
+                Text(title)
+                    .font(.title2)
+                Spacer()
+                Button(action: {
+                    self.exportDataToR()
+                }, label: {
+                    Image(systemName: "r.circle")
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(Color.primary, Color.accentColor)
+                })
+            }
             Chart( data ) { item in
                 
                 BarMark(
@@ -41,6 +51,18 @@ struct StackedBarChart: View {
         }
         .padding()
 
+    }
+    
+    private func exportDataToR() {
+        
+        let resp = data.asRData(named: "data.\(ylab)")
+        #if os(iOS)
+        UIPasteboard.general.string = resp
+        #elseif os(macOS)
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(resp, forType: .string)
+        #endif
     }
 }
 

@@ -12,9 +12,9 @@ extension Array where Element == KeyValueData {
     /// Export data to R text and copy
     public func asRData(named: String) -> String {
         
-        var labels = self.map{ String("'\($0.label)'") }
-        var values = self.map{ String("\($0.value)") }
-        var groupings = self.map{ String("'\($0.grouping)'") }
+        let labels = self.map{ String("'\($0.label)'") }
+        let values = self.map{ String("\($0.value)") }
+        let groupings = self.map{ String("'\($0.grouping)'") }
         
         var res = String("\(named) <- data.frame(\n")
         res += String("  labels = c(\(labels.joined(separator: ", "))),\n")

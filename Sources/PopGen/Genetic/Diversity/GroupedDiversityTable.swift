@@ -72,9 +72,15 @@ struct GroupedDiversityTable: View {
     
     
     private func exportDataToR() {
-        print("exporting to R")
+        
         let resp = self.selectedData.asRData(named: "diversity.\(selectedGroup)")
-        print( resp )
+        #if os(iOS)
+        UIPasteboard.general.string = resp
+        #elseif os(macOS)
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(resp, forType: .string)
+        #endif
     }
     
     
