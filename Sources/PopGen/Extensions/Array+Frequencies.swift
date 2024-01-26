@@ -57,16 +57,25 @@ extension Array where Element == Frequencies {
     
     
     /// Translate into vector of Allele KeyValueData
-    public var toKeyValueData: [KeyValueData] {
+    ///
+    ///
+    public func toKeyValueData(grouped: Bool) -> [KeyValueData] {
         var ret = [KeyValueData]()
         for freq in self {
             for allele in freq.alleles {
-                ret.append( KeyValueData( label: allele,
+                ret.append( KeyValueData( label: grouped ? freq.label : allele,
                                           value: freq.forAllele(allele: allele),
-                                          grouping: freq.locus) )
+                                          grouping: grouped ? allele : freq.locus ) )
             }
         }
-        return ret
+        
+        if grouped {
+            return ret.sorted(by: { $0.grouping.compare($1.grouping, options: .numeric) == .orderedAscending })
+        } else {
+            return ret.sorted(by: { $0.label.compare($1.label, options: .numeric) == .orderedAscending })
+        }
+        
+
     }
     
 }

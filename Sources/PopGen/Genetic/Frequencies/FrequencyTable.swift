@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  FrequencyTable.swift
 //  
 //
 //  Created by Rodney Dyer on 1/22/24.

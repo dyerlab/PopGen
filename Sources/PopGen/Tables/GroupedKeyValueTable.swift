@@ -1,20 +1,21 @@
 //
-//  KeyValueTable.swift
-//  
+//  GroupedTableView.swift
 //
-//  Created by Rodney Dyer on 1/22/24.
+//
+//  Created by Rodney Dyer on 1/26/24.
 //
 
 import SwiftUI
 
-struct KeyValueTable: View {
+struct GroupedTableView: View {
     var data: [KeyValueData]
     
     var body: some View {
         Table( data ) {
+            TableColumn("Partition", value: \.grouping)
             TableColumn("Parameter", value: \.label)
             TableColumn("Value") { item in
-                if item.asDouble { 
+                if item.asDouble {
                     Text(String(format: "%0.4f", item.value))
                 } else {
                     Text(String(format: "%0.0f", item.value))
@@ -25,5 +26,6 @@ struct KeyValueTable: View {
 }
 
 #Preview {
-    KeyValueTable( data: Diversity.Default().toKeyValueData() )
+    GroupedTableView( data: Population.DefaultPopulation.diversityFor( level: "Region",
+                                                                  at: "WNT").toKeyValueData(grouped: false ))
 }

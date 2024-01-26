@@ -66,23 +66,6 @@ public struct Diversity: Hashable, Identifiable {
     
     /// The name of the locus being examined.
     public var locus: String = ""
-
-    
-    /// As Key Value data
-    public var toKeyValueData: [KeyValueData] {
-        var ret = [KeyValueData]()
-        
-        ret.append( KeyValueData(label: "N", value: N ) )
-        ret.append( KeyValueData(label: "A", value: A ) )
-        ret.append( KeyValueData(label: "A95", value: A95 ) )
-        ret.append( KeyValueData(label: "Ae", value: Ae ) )
-        ret.append( KeyValueData(label: "Ho", value: Ho ) )
-        ret.append( KeyValueData(label: "He", value: He ) )
-        ret.append( KeyValueData(label: "F", value: F ) )
-        
-        return ret
-    }
-    
     
     /// Default init with no data.
     public init() {}
@@ -118,7 +101,30 @@ public struct Diversity: Hashable, Identifiable {
         Ae = A > 0 ? 1.0 / (1.0 - He) : 0.0
         F = He > 0 ? 1.0 - Ho / He : 0.0
         self.locus = frequencies.locus
-        self.label = frequencies.label 
+        self.label = frequencies.label
+    }
+    
+    
+    public func toKeyValueData( grouped: Bool = false  ) -> [KeyValueData] {
+        var ret = [KeyValueData]()
+        if grouped {
+            ret.append( KeyValueData(label: self.label, value: N, grouping: "N"))
+            ret.append( KeyValueData(label: self.label, value: A, grouping: "A" ) )
+            ret.append( KeyValueData(label: self.label, value: A95, grouping: "A95" ) )
+            ret.append( KeyValueData(label: self.label, value: Ae, grouping: "Ae" ) )
+            ret.append( KeyValueData(label: self.label, value: Ho, grouping: "Ho") )
+            ret.append( KeyValueData(label: self.label, value: He, grouping: "He") )
+            ret.append( KeyValueData(label: self.label, value: F, grouping: "F") )
+        } else {
+            ret.append( KeyValueData(label: "N", value: N, grouping: self.locus))
+            ret.append( KeyValueData(label: "A", value: A, grouping: self.locus) )
+            ret.append( KeyValueData(label: "A95", value: A95, grouping: self.locus) )
+            ret.append( KeyValueData(label: "Ae", value: Ae, grouping: self.locus) )
+            ret.append( KeyValueData(label: "Ho", value: Ho, grouping: self.locus) )
+            ret.append( KeyValueData(label: "He", value: He, grouping: self.locus) )
+            ret.append( KeyValueData(label: "F", value: F, grouping: self.locus) )
+        }
+        return ret
     }
     
 }
@@ -140,7 +146,7 @@ extension Diversity: MatrixConvertible {
         ret[0,6] = F
         return ret
     }
-
+    
 }
 
 
@@ -148,7 +154,7 @@ extension Diversity: MatrixConvertible {
 
 
 extension Diversity: CustomStringConvertible {
-
+    
     /// Override of description for CustomStringConvertible
     public var description: String {
         var ret = "Genetic Diversity: \(label)\n"
@@ -189,7 +195,7 @@ public extension Diversity {
 
 
 extension Diversity: Equatable {
-
+    
     /// Override equality operator that assumes all instance variables are identical.
     public static func ==(lhs:Diversity, rhs:Diversity) -> Bool {
         return ( lhs.id == rhs.id &&

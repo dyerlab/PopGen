@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  DiversityTable.swift
 //  
 //
 //  Created by Rodney Dyer on 1/22/24.
@@ -15,7 +15,7 @@ struct DiversityTable: View {
         VStack(alignment: .leading) {
             Text("Genetic Diversity: \(diversity.locus)")
                 .font(.title2)
-            KeyValueTable(data: diversity.asKeyValueData )
+            KeyValueTable(data: diversity.toKeyValueData(grouped: false) )
         }
         .padding()
     }

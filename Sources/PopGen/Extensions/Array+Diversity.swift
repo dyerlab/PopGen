@@ -12,13 +12,11 @@ import Foundation
 extension Array where Element == Diversity {
     
     /// Extract KVData for diversity parameters
-    public var toKVData: [KeyValueData] {
+    public func toKeyValueData( grouped: Bool) -> [KeyValueData] {
         var ret = [KeyValueData]()
-        
         for diversity in self {
-            ret.append( contentsOf: diversity.toKeyValueData)
+            ret.append( contentsOf: diversity.toKeyValueData(grouped: grouped) )
         }
-        
         return ret
     }
     

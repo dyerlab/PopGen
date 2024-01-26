@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  BarChart.swift
 //  
 //
 //  Created by Rodney Dyer on 1/26/24.
@@ -52,7 +52,8 @@ struct BarChart: View {
         BarChart( title: "WNT Allelic Diversity",
                   xlab: "Population",
                   ylab: "Ae",
-                  data: Population.DefaultPopulation.frequencyForLocus(named: "LTRS").asKeyValueData )
+                  data: Population.DefaultPopulation.diversityFor( level: "Region",
+                                                                   at: "WNT").toKeyValueData(grouped: true).filter { $0.grouping == "Ae" } )
         
 
     }
