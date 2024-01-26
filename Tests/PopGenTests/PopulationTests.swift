@@ -21,7 +21,6 @@ final class PopulationTests: XCTestCase {
         
         let partitions = RawData.DefaultBajaPartitions
         let individuals = RawData.DefaultUnnestedIndividuals
-        
         let pop = Population(individuals: individuals, partitions: partitions )
         
         XCTAssertEqual( pop.count, 365)
@@ -29,5 +28,21 @@ final class PopulationTests: XCTestCase {
         print(pop.description)
     }
 
+    
+    func testFrequencies() throws {
+
+        let partitions = RawData.DefaultBajaPartitions
+        let individuals = RawData.DefaultUnnestedIndividuals
+        let pop = Population(individuals: individuals, partitions: partitions )
+
+        let freqs = pop.frequencyForLocus(named: "LTRS")
+        print("\(freqs)")
+        XCTAssertEqual(freqs.alleles, ["1","2"])
+        XCTAssertEqual(freqs.forAllele(allele: "1"), 381.0/730.0)
+        XCTAssertEqual(freqs.forAllele(allele: "3"), 0.0)
+        XCTAssertEqual(freqs.forAlleles(alleles: ["2", "4"]), [349.0/730.0, 0.0])
+        XCTAssertEqual(freqs.numHets, 87.0)
+        XCTAssertEqual(freqs.numDiploid, 365.0)
+    }
 
 }
