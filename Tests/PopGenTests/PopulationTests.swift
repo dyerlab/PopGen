@@ -9,32 +9,16 @@ import XCTest
 
 final class PopulationTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
     func testInit() throws {
-        
-        let partitions = RawData.DefaultBajaPartitions
-        let individuals = RawData.DefaultUnnestedIndividuals
-        
-        let pop = Population(individuals: individuals, partitions: partitions )
+        let pop = Population.DefaultPopulation
         
         XCTAssertEqual( pop.count, 365)
-        
         print(pop.description)
     }
     
     
     func testFrequencies() throws {
-
-        let partitions = RawData.DefaultBajaPartitions
-        let individuals = RawData.DefaultUnnestedIndividuals
-        let pop = Population(individuals: individuals, partitions: partitions )
+        let pop = Population.DefaultPopulation
 
         let freqs = pop.frequencyForLocus(named: "LTRS")
         print("\(freqs)")
@@ -47,9 +31,7 @@ final class PopulationTests: XCTestCase {
     }
 
     func testSubpopulations() throws {
-        let partitions = RawData.DefaultBajaPartitions
-        let individuals = RawData.DefaultUnnestedIndividuals
-        let pop = Population(individuals: individuals, partitions: partitions )
+        let pop = Population.DefaultPopulation
         
         let regions = pop.subpopulations(at: "Region")
         XCTAssertEqual( regions.count, 4)

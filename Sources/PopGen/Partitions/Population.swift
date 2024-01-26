@@ -134,7 +134,7 @@ public class Population {
     
     /// Getting frequencies for a specific locus
     public func frequencyForLocus( named: String ) -> Frequencies {
-        return Frequencies(locus: named, genotypes: self.locusNamed(name: named) )
+        return Frequencies(label: self.name, locus: named, genotypes: self.locusNamed(name: named) )
     }
  
     
@@ -179,3 +179,33 @@ extension Population: CustomStringConvertible {
 }
 
 
+
+// MARK: - Extraction methods
+
+extension Population {
+    
+    public func frequenciesFor(level: String, at locus: String ) -> [Frequencies] {
+        let pops = subpopulations(at: level)
+        return pops.map{ $0.frequencyForLocus(named: locus) }
+    }
+    
+    public func diversityFor(level: String, at locus: String) -> [Diversity] {
+        return self.frequenciesFor(level: level, at: locus).map { $0.asDiversity }
+    }
+    
+}
+
+
+
+// MARK: - Defaults
+
+extension Population {
+    
+    /// Default data based upon full Baja California dataset
+    static var DefaultPopulation: Population {
+        let partitions = RawData.DefaultBajaPartitions
+        let individuals = RawData.DefaultUnnestedIndividuals
+        return Population(individuals: individuals, partitions: partitions )
+    }
+    
+}

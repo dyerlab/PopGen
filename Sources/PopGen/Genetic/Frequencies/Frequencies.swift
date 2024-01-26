@@ -127,12 +127,8 @@ public class Frequencies: Identifiable, Codable {
     
     
     /// Initialize frequency object with array of genotypes
-    public init(locus: String, genotypes: [Genotype] ) {
-        self.id = UUID()
-        self.locus = locus
-        for geno in genotypes {
-            addGenotype(geno: geno)
-        }
+    public convenience init(locus: String, genotypes: [Genotype]) {
+        self.init(label: "", locus: locus, genotypes: genotypes)
     }
 
     
@@ -307,6 +303,5 @@ extension Frequencies: Equatable {
                  lhs.locus == rhs.locus )
     }
 }
-
 
 

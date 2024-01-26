@@ -56,4 +56,17 @@ extension Array where Element == Frequencies {
     
     
     
+    /// Translate into vector of Allele KeyValueData
+    public var toKeyValueData: [KeyValueData] {
+        var ret = [KeyValueData]()
+        for freq in self {
+            for allele in freq.alleles {
+                ret.append( KeyValueData( label: allele,
+                                          value: freq.forAllele(allele: allele),
+                                          grouping: freq.locus) )
+            }
+        }
+        return ret
+    }
+    
 }

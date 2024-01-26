@@ -39,10 +39,12 @@ struct PieChart: View {
             Text("\(title)")
                 .font(.title2)
         }
+        .padding()
     }
 }
 
 #Preview {
+    
     PieChart( title: "The Locus",
               data: Frequencies.Default().asKeyValueData )
 }

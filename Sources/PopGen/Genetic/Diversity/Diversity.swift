@@ -69,7 +69,7 @@ public struct Diversity: Hashable, Identifiable {
 
     
     /// As Key Value data
-    public var asKeyValueData: [KeyValueData] {
+    public var toKeyValueData: [KeyValueData] {
         var ret = [KeyValueData]()
         
         ret.append( KeyValueData(label: "N", value: N ) )
@@ -93,7 +93,7 @@ public struct Diversity: Hashable, Identifiable {
     ///     - locus: The name of the locus being examined.
     ///     - genos: An array of `Genotype` objects to estimate parameters from.
     public init(locus: String, genos: [Genotype]) {
-        self.setParameters(frequencies: Frequencies(locus: locus, genotypes: genos) )
+        self.setParameters(frequencies: Frequencies(label: "", locus: locus, genotypes: genos) )
     }
     
     /// Initializer from allele frequency object
@@ -118,6 +118,7 @@ public struct Diversity: Hashable, Identifiable {
         Ae = A > 0 ? 1.0 / (1.0 - He) : 0.0
         F = He > 0 ? 1.0 - Ho / He : 0.0
         self.locus = frequencies.locus
+        self.label = frequencies.label 
     }
     
 }
