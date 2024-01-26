@@ -1329,7 +1329,6 @@ public struct RawData {
                 names.append( row[col] )
             }
             let partition = Partition(level: levels[col], names: names)
-            print("\(partition)\n")
             ret.append( partition )
         }
         return ret

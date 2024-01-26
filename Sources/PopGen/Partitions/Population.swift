@@ -136,6 +136,31 @@ public class Population {
     public func frequencyForLocus( named: String ) -> Frequencies {
         return Frequencies(locus: named, genotypes: self.locusNamed(name: named) )
     }
+ 
+    
+    /// All subpopulations at a level
+    public func subpopulations(at level: String) -> [Population] {
+        var ret = [Population]()
+        
+        for subpopulation in subpopulations {
+            if subpopulation.level == level {
+                ret.append( subpopulation )
+            }
+            else {
+                ret.append(contentsOf: subpopulation.subpopulations(at: level))
+            }
+        }
+        
+        return ret
+    }
+    
+    
+    /// Specific subpopulation at a level
+    public func subpopulation( at level: String, named name: String) -> Population? {
+        let ret = self.subpopulations(at: level).first(where: { $0.name == name })
+        return ret
+    }
+    
     
     
 }
