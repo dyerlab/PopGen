@@ -61,5 +61,6 @@ class AMOVADistanceTests: XCTestCase {
         
         XCTAssertEqual( M, X )
         XCTAssertEqual(amovaDistance(geno1: Genotype(raw: "A:B"), geno2: Genotype(raw: "C:D")), 2.0)
+        XCTAssertEqual( X.sum, 60.0)
     }
 }

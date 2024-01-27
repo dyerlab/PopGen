@@ -93,6 +93,9 @@ public struct WierCockerham {
             }
         }
         
+        print("making D")
+        print("D Sum = \(D.sum)")
+        
         H = Matrix.IdempotentHatMatrix(strata: strata )
         C = D.asCovariance
         SST = (H .* C).trace
@@ -150,7 +153,7 @@ extension WierCockerham: CustomStringConvertible {
         ret += String("SST: \(SST), SSA: \(SSA), SSW: \(SSW)\n")
         ret += String("MSA: \(MSA), MSW: \(MSW)\n")
         
-        ret += "D: \n\(D)\n"
+        // ret += "D: \n\(D)\n"
         
         return ret
     }

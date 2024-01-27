@@ -37,26 +37,32 @@ final class WierCockerhamTests: XCTestCase {
         
         let allData = Population.DefaultPopulation
         
-        if let son101 = allData.subpopulation(at: "Population", named: "101")?.individuals.getGenotypes(named: "WNT"),
-           let son102 = allData.subpopulation(at: "Population", named: "102")?.individuals.getGenotypes(named: "WNT") {
+        if let son101 = allData.subpopulation(at: "Population", named: "101")?.individuals,
+           let son102 = allData.subpopulation(at: "Population", named: "32")?.individuals,
+           let son32 = allData.subpopulation(at: "Population", named: "32")?.individuals {
             
-            var genotypes = [Genotype]()
-            for geno in son101 {
-                genotypes.append( geno )
-            }
-            for geno in son102 {
-                genotypes.append( geno )
-            }
+            var genotypes1 = son101.getGenotypes(named: "EN")
+            genotypes1.append( contentsOf: son32.getGenotypes(named: "EN"))
+            genotypes1.append( contentsOf: son102.getGenotypes(named: "EN"))
+
+            
+            print("Genotypes in WCTests")
+            print("\(genotypes1.count) genotypes")
+            print("\(genotypes1)")
             
             var locales = Array(repeating: "101", count: son101.count )
+            locales.append(contentsOf: Array( repeating: "32", count: son32.count))
             locales.append(contentsOf:  Array( repeating: "102", count: son102.count))
             
             
-            let wc = WierCockerham(locus: "WNT", genotypes: genotypes, partitions: locales )
+            let wc = WierCockerham(locus: "LTRS", genotypes: genotypes1, partitions: locales )
+            
+            let Dsum = wc.D.sum
+            print("DSum: \(Dsum)")
             
             print("\(wc)")
             
-            print("\(wc.C)")
+            // print("\(wc.C)")
         }
         
 
