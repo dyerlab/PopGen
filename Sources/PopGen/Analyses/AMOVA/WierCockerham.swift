@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Rodney Dyer on 6/2/22.
 //
@@ -15,6 +15,9 @@ import DLMatrix
 /// This is a Matrix Algebra version of this analysis.  This only does a single level in the
 ///   analysis.
 public struct WierCockerham {
+    
+    /// The locus being examined
+    public let locus: String
     
     /// The AMOVA distance matrix
     public let D: Matrix
@@ -63,11 +66,21 @@ public struct WierCockerham {
         return SSA / dfA
     }
     
+    /// Return as array of AMOVAData for tabular output
+    public var asAMOVAData: [AMOVAData] {
+        var ret = [AMOVAData]()
+        ret.append( AMOVAData(source: "Population", df: Int(dfA), SS: SSA, MS: MSA) )
+        ret.append( AMOVAData(source: "Error", df: Int(dfW), SS: SSW, MS: MSW) )
+        ret.append( AMOVAData(source: "Total", df: Int(dfT), SS: SST))
+        return ret
+    }
+    
     /// Main init for this analysis.
     ///
     /// This anlayiss takes a vector of genotypes and a vector of partitions and creates the raw materials for
     ///     the overall analyses.
-    init(genotypes: [Genotype], partitions: [String]) {
+    init(locus: String, genotypes: [Genotype], partitions: [String]) {
+        self.locus = locus
         let N = genotypes.count
         strata = partitions
         dfT = Double(N) - 1.0
@@ -90,7 +103,39 @@ public struct WierCockerham {
     }
     
     
-
+    /// AMOVA iniit for this
+    init(loci: [String], genotypes: [ [Genotype] ], partitions: [String] ) {
+        if loci.count > 10 {
+            self.locus = String( "\(loci.count) loci")
+        } else {
+            self.locus = loci.joined(separator: ", ")
+        }
+        
+        
+        let N = genotypes[0].count
+        strata = partitions
+        dfT = Double(N) - 1.0
+        
+        D = Matrix( N, N )
+        for geno in 0 ..< genotypes.count {
+            for i in 0 ..< N {
+                for j in (i+1) ..< N {
+                    D[i,j] += amovaDistance(geno1: genotypes[geno][i], geno2: genotypes[geno][j])
+                    D[j,i] += D[i,j]
+                }
+            }
+        }
+        
+        H = Matrix.IdempotentHatMatrix(strata: strata )
+        C = D.asCovariance
+        SST = (H .* C).trace
+        
+        let I = Matrix.Identity( N: H.cols )
+        SSW = ((I - H) .* C).trace
+    }
+    
+    
+    
 }
 
 
@@ -111,4 +156,32 @@ extension WierCockerham: CustomStringConvertible {
     }
     
     
+}
+
+
+
+extension WierCockerham {
+    
+    static var DefaultWC: WierCockerham {
+        
+        let pop = Population.DefaultPopulation
+        
+        let strata = pop.strataForLevel( level: "Region" )
+        let genotypes = pop.locusNamed(name: "WNT")
+        
+        return WierCockerham(locus: "WNT", genotypes: genotypes, partitions: strata)
+    }
+    
+    
+    static var DefaultAMOVA: WierCockerham {
+        let strata = RawData.DefaultBajaPartitions[0].names
+        let genos = RawData.DefaultBajaLoci
+        let loci: [String] = genos.map{ $0.name }
+        var genotypes = [ [Genotype] ]()
+        for geno in genos {
+            genotypes.append( geno.genotypes )
+        }
+        
+        return WierCockerham(loci: loci, genotypes: genotypes, partitions: strata)
+    }
 }

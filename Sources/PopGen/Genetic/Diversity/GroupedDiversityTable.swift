@@ -65,7 +65,9 @@ struct GroupedDiversityTable: View {
                     }
                 }
             }
+            .cornerRadius(5.0)
             .frame( minHeight: 150 )
+            
         }
         .padding()
     }

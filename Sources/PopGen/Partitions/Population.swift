@@ -132,6 +132,23 @@ public class Population {
         return self.individuals.compactMap { $0.loci[name] }
     }
     
+    /// Get partition names for all individuals
+    public func strataForLevel( level: String ) -> [String] {
+        var ret = [String]()
+        
+        for pop in subpopulations {
+            if pop.level == level {
+                ret.append( contentsOf: Array(repeating: pop.name, count: pop.count))
+            }
+            else {
+                ret.append( contentsOf: pop.strataForLevel(level: level) )
+            }
+        }
+        
+        return ret
+    }
+    
+    
     /// Getting frequencies for a specific locus
     public func frequencyForLocus( named: String ) -> Frequencies {
         return Frequencies(label: self.name, locus: named, genotypes: self.locusNamed(name: named) )

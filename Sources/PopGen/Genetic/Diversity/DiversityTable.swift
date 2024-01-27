@@ -8,16 +8,12 @@
 import SwiftUI
 
 struct DiversityTable: View {
-
+    
     let diversity: Diversity
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Genetic Diversity: \(diversity.locus)")
-                .font(.title2)
-            KeyValueTable(data: diversity.toKeyValueData(grouped: false) )
-        }
-        .padding()
+        KeyValueTable(title: String("Genetic Diversity: \(diversity.locus)"),
+                      data: diversity.toKeyValueData(grouped: false) )
     }
 }
 

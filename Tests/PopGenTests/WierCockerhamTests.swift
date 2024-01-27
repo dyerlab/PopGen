@@ -32,32 +32,35 @@ import XCTest
 
 final class WierCockerhamTests: XCTestCase {
 
-/*
+
     func testWC() throws {
-        let store = DataStore.Default()
-        let son101 = store.stratum(named: "101")
-        let son102 = store.stratum(named: "102")
         
+        let allData = Population.DefaultPopulation
         
-        var inds = son101.individuals
-        inds.append(contentsOf: son102.individuals )
-        
-        for ind in inds {
-            print("\(ind)")
+        if let son101 = allData.subpopulation(at: "Population", named: "101")?.individuals.getGenotypes(named: "WNT"),
+           let son102 = allData.subpopulation(at: "Population", named: "102")?.individuals.getGenotypes(named: "WNT") {
+            
+            var genotypes = [Genotype]()
+            for geno in son101 {
+                genotypes.append( geno )
+            }
+            for geno in son102 {
+                genotypes.append( geno )
+            }
+            
+            var locales = Array(repeating: "101", count: son101.count )
+            locales.append(contentsOf:  Array( repeating: "102", count: son102.count))
+            
+            
+            let wc = WierCockerham(locus: "WNT", genotypes: genotypes, partitions: locales )
+            
+            print("\(wc)")
+            
+            print("\(wc.C)")
         }
         
-        
-        var locales = Array(repeating: "101", count: son101.count )
-        locales.append(contentsOf:  Array( repeating: "102", count: son102.count))
-        
-        
-        let wc = WierCockerham(genotypes: inds.getGenotypes(named: "LTRS"), partitions: locales )
-        
-        print("\(wc)")
-        
-        print("\(wc.C)")
 
     }
 
- */
+
 }

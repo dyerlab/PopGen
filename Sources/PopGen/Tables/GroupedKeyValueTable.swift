@@ -36,6 +36,7 @@ struct GroupedTableView: View {
                     }
                 }
             }
+            .cornerRadius(5.0)
         }
         .padding()
     }
