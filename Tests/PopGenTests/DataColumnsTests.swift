@@ -44,7 +44,8 @@ final class DataColumnsTests: XCTestCase {
         
         XCTAssertEqual( reader.contents.count, 364)
         XCTAssertEqual( reader.contents[0].count, 14)
-        let dcols = DataColumns(raw: reader.contents )
+        var dcols = DataColumns()
+        dcols.setFromHeader(raw: reader.contents )
         
         XCTAssertTrue( dcols.isSpatial )
         XCTAssertTrue( dcols.hasID )

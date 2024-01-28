@@ -8,12 +8,12 @@
 import Foundation
 
 public struct DataColumns {
-    private let header: [String]
-    var strata: [Int]
+    private var header: [String] = [String]()
+    var strata: [Int] = [Int]()
     var idCol: Int? = nil
     var latitude: Int? = nil
     var longitude: Int? = nil
-    var loci: [Int]
+    var loci: [Int] = [Int]()
     
     var isSpatial: Bool {
         return latitude != nil && longitude != nil
@@ -27,7 +27,9 @@ public struct DataColumns {
         return strata.isEmpty && loci.isEmpty
     }
     
-    init( raw: [[String]] ) {
+    init() { }
+    
+    public mutating func setFromHeader( raw: [[String]]) {
         assert( raw.count > 0 )
         self.header = raw.first!
         self.strata = [Int]()

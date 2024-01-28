@@ -24,7 +24,8 @@ public struct CSVReader {
     
     func asDataStore() -> DataSet? {
         let ret = DataSet()
-        let dcol = DataColumns(raw: self.contents)
+        var dcol = DataColumns()
+        dcol.setFromHeader(raw: self.contents)
         if dcol.isEmpty  {
             return nil 
         }
