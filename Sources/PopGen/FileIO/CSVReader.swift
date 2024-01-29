@@ -48,7 +48,11 @@ public struct CSVReader {
                     ind.latitude = lat
                     ind.longitude = lon
                 }
-                
+
+                if let col = dcol.idCol {
+                    let key = header[ col ] 
+                    ind.strata[ key ] = vals[ col ]
+                }
                 // Add the individual
                 ret.addIndividual(ind: ind)
                 

@@ -40,7 +40,6 @@ public func amovaDistance(geno1: Genotype, geno2: Genotype) -> Double {
     if geno1.isEmpty || geno2.isEmpty || geno1 == geno2 {
         return 0.0
     }
-
     let allAlleles: [String] = Set<String>([geno1.left, geno2.left, geno1.right, geno2.right]).unique()
     let x = geno1.asVector(alleles: allAlleles)
     let y = geno2.asVector(alleles: allAlleles)
@@ -54,4 +53,34 @@ public func amovaDistance(geno1: Genotype, geno2: Genotype) -> Double {
 /// - Returns: The distance between them
 public func amovaDistance(_ vec1: Vector, _ vec2: Vector) -> Double {
     return ((vec1 - vec2).map { $0 * $0 }).sum / 2.0
+}
+
+
+
+/// Estiamte from a set of indiviudals
+///
+/// This is the wrapper to allow AMOVA distance to be estimated from an array of individuals.
+/// - Parameters:
+///     - individuals: An array of ``Individual`` objects
+/// - Returns: A matris of pairwise amova distances.
+public func amovaDistance( individuals: [Individual ] ) -> Matrix  {
+    
+    let N = individuals.count
+    let D = Matrix( N, N, 0)
+    
+    if let locusNames = individuals.first?.locusNames {
+        for i in 0 ..< N {
+            for j in (i+1) ..< N {
+                var val = 0.0
+                for locus in locusNames {
+                    val += amovaDistance( geno1: individuals[i].loci[locus, default: Genotype()],
+                                          geno2: individuals[j].loci[locus, default: Genotype()])
+                }
+                D[i,j] = val
+                D[j,i] = val
+            }
+        }
+    }
+    
+    return D
 }
