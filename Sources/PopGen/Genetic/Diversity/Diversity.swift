@@ -198,8 +198,7 @@ extension Diversity: Equatable {
     
     /// Override equality operator that assumes all instance variables are identical.
     public static func ==(lhs:Diversity, rhs:Diversity) -> Bool {
-        return ( lhs.id == rhs.id &&
-                 lhs.N == rhs.N &&
+        return ( lhs.N == rhs.N &&
                  lhs.A == rhs.A &&
                  lhs.A95 == rhs.A95 &&
                  lhs.Ae == rhs.Ae &&

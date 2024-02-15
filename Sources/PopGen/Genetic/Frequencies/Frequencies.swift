@@ -248,7 +248,7 @@ public extension Frequencies {
     /// Static default version of this object
     static func Default() -> Frequencies {
         let data = DataSet.Default()
-        let locus = data.individuals.locusKeys.shuffled().first!
+        let locus = "MP20"
         let genos = data.individuals.getGenotypes(named: locus)
         let freqs = Frequencies(locus: locus, genotypes: genos)
         return freqs
