@@ -52,7 +52,6 @@ struct BarChart: View {
     }
     
     private func exportDataToR() {
-        
         let resp = data.asRData(named: "data.\(ylab)")
         #if os(iOS)
         UIPasteboard.general.string = resp

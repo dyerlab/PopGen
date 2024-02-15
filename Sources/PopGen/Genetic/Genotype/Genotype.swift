@@ -181,6 +181,7 @@ public struct Genotype: Codable, Equatable, CustomStringConvertible {
 // MARK: - Operators
 
 public extension Genotype {
+    
     /**
      Random mating of two genotypes.  Both must be diploid
      - Parameters:
@@ -192,10 +193,8 @@ public extension Genotype {
         if parent1.ploidy != .Diploid || parent2.ploidy != .Diploid {
             return Genotype()
         }
-
         let left = Bool.random() == true ? parent1.left : parent1.right
         let right = Bool.random() == true ? parent2.left : parent2.right
-
         return Genotype(alleles: (left, right))
     }
 }
