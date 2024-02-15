@@ -33,6 +33,8 @@ import XCTest
 import DLMatrix
 
 class AMOVADistanceTests: XCTestCase {
+    
+    
     func testExample() throws {
         let loci = [Genotype(raw: "A:A"),
                     Genotype(raw: "A:B"),
@@ -101,6 +103,7 @@ class AMOVADistanceTests: XCTestCase {
     
     
     
+    
     func testArapat() throws {
         
         guard let path = Bundle.module.path(forResource: "arapat", ofType: "csv") else {
@@ -128,11 +131,7 @@ class AMOVADistanceTests: XCTestCase {
             print(D)
             print(D.sum)
             XCTAssertEqual( D.sum, 220.0)
-                        
         }
-        
-
-        
         
         /*
          

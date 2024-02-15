@@ -44,7 +44,6 @@ final class Array_FrequenciesTests: XCTestCase {
                       Frequencies(label: "Pop2", locus: "LOC-1", genotypes: genos2),
                       Frequencies(label: "Pop3", locus: "LOC-1", genotypes: genos3) ]
         
-        
         let X = freqs.toMatrix()
         
         XCTAssertEqual( X.rows, 3 )
@@ -68,10 +67,8 @@ final class Array_FrequenciesTests: XCTestCase {
         XCTAssertEqual( freqs[0].asDiversity.Ho, 3.0 / 7.0 )
         XCTAssertEqual( freqs[0].asDiversity.He, 1.0 - ( (9.0/14.0 * 9.0/14.0) + (5.0/14.0 * 5.0/14.0) ) )
         
-        
-        
-
     }
 
+                        
 
 }

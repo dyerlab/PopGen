@@ -64,7 +64,6 @@ struct GenotypeView_Previews: PreviewProvider {
             GenotypeView(genotype: Genotype.DefaultHeterozygoteMomLeft(), reduced: true)
             GenotypeView(genotype: Genotype.DefaultHeterozygoteMomRight(), reduced: true)
             GenotypeView(genotype: Genotype.DefaultHeterozygoteUndefined(), reduced: true)
-            
         }
         .padding()
         

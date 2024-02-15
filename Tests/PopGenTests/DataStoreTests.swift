@@ -29,7 +29,6 @@
 //
 
 @testable import PopGen
-
 import XCTest
 
 class DataStoreTests: XCTestCase {

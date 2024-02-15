@@ -13,6 +13,7 @@ struct GroupedTableView: View {
     
     var body: some View {
         VStack {
+            
             HStack {
                 Text(title)
                     .font(.title2)
@@ -25,6 +26,7 @@ struct GroupedTableView: View {
                         .foregroundStyle(Color.primary, Color.accentColor)
                 })
             }
+            
             Table( data ) {
                 TableColumn("Partition", value: \.grouping)
                 TableColumn("Parameter", value: \.label)
@@ -43,8 +45,8 @@ struct GroupedTableView: View {
     
     
     private func exportDataToR() {
-        
         let resp = data.asRData(named: "data")
+        
         #if os(iOS)
         UIPasteboard.general.string = resp
         #elseif os(macOS)
@@ -52,12 +54,13 @@ struct GroupedTableView: View {
         pasteboard.clearContents()
         pasteboard.setString(resp, forType: .string)
         #endif
+        
     }
-
+    
 }
 
 #Preview {
     GroupedTableView( title: "Diversity Measures Across Regions for WNT",
                       data: Population.DefaultPopulation.diversityFor( level: "Region",
-                                                                  at: "WNT").toKeyValueData(grouped: false ))
+                                                                       at: "WNT").toKeyValueData(grouped: false ))
 }

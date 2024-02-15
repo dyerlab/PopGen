@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FrequencyTable: View {
+    
     var frequencies: Frequencies
     
     var data: [KeyValueData] {
@@ -22,5 +23,5 @@ struct FrequencyTable: View {
 }
 
 #Preview {
-    FrequencyTable(frequencies: Frequencies.Default() )
+    FrequencyTable( frequencies: Frequencies.Default() )
 }
