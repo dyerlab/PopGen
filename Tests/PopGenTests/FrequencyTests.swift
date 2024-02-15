@@ -45,7 +45,52 @@ class FrequencyTests: XCTestCase {
         XCTAssertEqual(freqs.forAlleles(alleles: ["2", "4"]), [349.0/730.0, 0.0])
         XCTAssertEqual(freqs.numHets, 87.0)
         XCTAssertEqual(freqs.numDiploid, 365.0)
+    }
+    
+    
+    func testMatrix() throws {
+        let freq = Frequencies.Default()
+        let F = freq.asMatrix()
+        XCTAssertEqual( F.rows, 1  )
+        XCTAssertEqual( F.cols, 19 )
+        print("\(F)")
+    }
+
+    
+    func testFreqInits() throws {
+        let freq = Frequencies(freqs: [ Frequencies.Default(), Frequencies.Default() ] )
+        XCTAssertEqual( freq.numDiploid, 720.0 )
+    }
+    
+    
+    func testFreqs() throws {
+        let freq2 = Frequencies.DefaultList()
+        if let f2 = freq2.first(where: { $0.locus == "MP20" } ) {
+            XCTAssertTrue( Frequencies.Default() == f2 )
+        }
+    }
+    
+    
+    func testAddLocus() throws {
+        let freq = Frequencies.Default()
+        let Nhet = freq.numHets
+        let Ndip = freq.numDiploid
         
+        freq.addGenotype(geno: Genotype(raw: "1:2") )
+        XCTAssertEqual( freq.numHets, (Nhet + 1) )
+        XCTAssertEqual( freq.numDiploid, (Ndip + 1) )
+        XCTAssertFalse( freq.isEmpty )
+        
+        XCTAssertEqual( freq.alleles,
+                        ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"] )
+    }
+    
+    
+    func testKVConversion() throws {
+        
+        let freq = Frequencies.Default()
+        let kvData = freq.asKeyValueData
+        XCTAssertEqual( kvData.count, 19 )
     }
     
     
